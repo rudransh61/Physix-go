@@ -1,4 +1,4 @@
-module physics
+module physix
 
 go 1.21.1
 

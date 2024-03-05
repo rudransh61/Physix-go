@@ -2,7 +2,7 @@
 package collision
 
 import (
-	"physics/pkg/rigidbody"
+	"physix/pkg/rigidbody"
 	"math"
 )
 

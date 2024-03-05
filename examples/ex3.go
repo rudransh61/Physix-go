@@ -4,9 +4,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/internal/physics"
 	"physix/pkg/rigidbody"
 	"physix/pkg/vector"
+	"physix/internal/physics"
 )
 
 var (
@@ -15,26 +15,35 @@ var (
 )
 
 func update() error {
-	// Update the physix simulation
-	physix.UpdateRigidBody(ball, vector.Vector{X: 0, Y: 2}, dt)
+	// Apply a force to simulate gravity
+	gravity := vector.Vector{X: 0, Y: 2}
+	physix.UpdateRigidBody(ball, gravity, dt)
+
+	// Bounce off the walls
+	if ball.Position.X < 0 || ball.Position.X > 400 {
+		ball.Velocity.X *= -1
+	}
+	if ball.Position.Y < 0 || ball.Position.Y > 400 {
+		ball.Velocity.Y *= -1
+	}
 
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physix engine's position
-	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 50, 50, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
+	// Draw the ball using the physix engine's position
+	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 20, 20, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 }
 
 func main() {
 	// Set up the window
 	ebiten.SetWindowSize(400, 400)
-	ebiten.SetWindowTitle("Projectile Motion")
+	ebiten.SetWindowTitle("Bouncing Ball")
 
 	// Initialize a rigid body with your physix engine
 	ball = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 100, Y: 400},
-		Velocity: vector.Vector{X: 30, Y: -30},
+		Position: vector.Vector{X: 100, Y: 200},
+		Velocity: vector.Vector{X: 50, Y: -50},
 		Mass:     1,
 	}
 

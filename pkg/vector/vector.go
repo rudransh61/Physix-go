@@ -11,14 +11,18 @@ type Vector struct {
 func (v Vector) Add(other Vector) Vector {
 	return Vector{v.X + other.X, v.Y + other.Y}
 }
+// NewVector creates a new vector with the given x and y components.
+func NewVector(x, y float64) Vector {
+	return Vector{X: x, Y: y}
+}
 
 // InnerProduct performs vector inner product or Dot product.
-func (v Vector) InnerProduct(other Vector) Vector {
-	return Vector{v.X * other.X, v.Y * other.Y}
+func (v Vector) InnerProduct(other Vector) float64 {
+	return v.X * other.X+ v.Y * other.Y
 }
 
 // Subtract performs vector subtraction.
-func (v Vector) Subtract(other Vector) Vector {
+func (v Vector) Sub(other Vector) Vector {
 	return Vector{v.X - other.X, v.Y - other.Y}
 }
 

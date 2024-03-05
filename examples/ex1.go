@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"physics/internal/physics"
-	"physics/pkg/rigidbody"
-	"physics/pkg/vector"
-	"physics/internal/collision"
+	"physix/internal/physics"
+	"physix/pkg/rigidbody"
+	"physix/pkg/vector"
+	"physix/internal/collision"
 )
 
 func main() {
@@ -31,8 +31,8 @@ func main() {
 	dt := 0.1 // Time step for simulation
 
 	for i := 0; i < 100; i++ {
-        physics.UpdateRigidBody(ball1, vector.Vector{X: 0, Y: 0}, dt)
-        physics.UpdateRigidBody(ball2, vector.Vector{X: 0, Y: 0}, dt)
+        physix.UpdateRigidBody(ball1, vector.Vector{X: 0, Y: 0}, dt)
+        physix.UpdateRigidBody(ball2, vector.Vector{X: 0, Y: 0}, dt)
 
         // Check for collision using circles
         if collision.CircleCollide(ball1.Circle, ball2.Circle) {

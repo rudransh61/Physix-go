@@ -1,6 +1,6 @@
 package rigidbody
 
-import "physics/pkg/vector"
+import "physix/pkg/vector"
 
 // RigidBody represents a 2D rigid body.
 type RigidBody struct {

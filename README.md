@@ -1,4 +1,4 @@
-# Physics : A simple Physics engine in Golang
+# physix : A simple physix engine in Golang
 
 # Example Project :-
 
@@ -11,9 +11,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physics/internal/physics"
-	"physics/pkg/rigidbody"
-	"physics/pkg/vector"
+	"physix/internal/physix"
+	"physix/pkg/rigidbody"
+	"physix/pkg/vector"
 )
 
 var (
@@ -22,14 +22,14 @@ var (
 )
 
 func update() error {
-	// Update the physics simulation
-	physics.UpdateRigidBody(ball, vector.Vector{X: 0, Y: 2}, dt)
+	// Update the physix simulation
+	physix.UpdateRigidBody(ball, vector.Vector{X: 0, Y: 2}, dt)
 
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physics engine's position
+	// Draw the rectangle using the physix engine's position
 	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 50, 50, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 }
 
@@ -38,7 +38,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Projectile Motion")
 
-	// Initialize a rigid body with your physics engine
+	// Initialize a rigid body with your physix engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 100, Y: 400},
 		Velocity: vector.Vector{X: 30, Y: -30},
