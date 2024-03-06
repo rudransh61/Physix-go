@@ -16,7 +16,7 @@ var (
 
 func update() error {
 	// Update the physix simulation
-	physix.ApplyForce(ball, vector.Vector{X: 0, Y: 2}, dt)
+	physix.ApplyForce(ball, ball.Force, dt)
 
 	return nil
 }
@@ -36,6 +36,7 @@ func main() {
 		Position: vector.Vector{X: 100, Y: 400},
 		Velocity: vector.Vector{X: 30, Y: -30},
 		Mass:     1,
+		Force : vector.Vector{X: 0, Y: 2},
 	}
 
 	// Run the game loop
