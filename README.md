@@ -1,71 +1,72 @@
-# physix : A simple physix engine in Golang
+# Physix.go
 
-# Example Project :-
+A simple Physics Engine in GoLang
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+## Introduction
+
+Physix.go is simple, easy to use , fast , physics engine written in GoLang
+With functions to perform physics calculations faster...
+
+## Features
+- Vector Calculations
+- Physics Calculations
+- Easy to use with [Ebiten.go](https://ebitengine.org/)
+
+## Getting Started
 
 
-# Example Code :-
-```go
-package main
+### Prerequisites
 
-import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
-	"physix/internal/physix"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-)
+GoLang must be installed
+And [Ebiten](https://ebiten.org)
 
-var (
-	ball *rigidbody.RigidBody
-	dt   = 0.1
-)
+### Installation
 
-func update() error {
-	// Update the physix simulation
-	physix.UpdateRigidBody(ball, vector.Vector{X: 0, Y: 2}, dt)
+Install 
 
-	return nil
-}
+To start , Clone this project
+```
+git clone https://github.com/rudransh61/Physix.go
+```
 
-func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physix engine's position
-	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 50, 50, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
-}
+Then Run the example files from `./example` folder
 
-func main() {
-	// Set up the window
-	ebiten.SetWindowSize(400, 400)
-	ebiten.SetWindowTitle("Projectile Motion")
+for example : 
+```
+go run ./example/ex4.go //which is simple circular motion
+```
 
-	// Initialize a rigid body with your physix engine
-	ball = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 100, Y: 400},
-		Velocity: vector.Vector{X: 30, Y: -30},
-		Mass:     1,
-	}
+## Documentation
 
-	// Run the game loop
-	if err := ebiten.RunGame(&Game{}); err != nil {
-		panic(err)
-	}
-}
+// Coming soon...
 
-// Game represents the game state.
-type Game struct{}
+## Examples
 
-// Update updates the game logic.
-func (g *Game) Update() error {
-	return update()
-}
+Check examples in `./example` folder
 
-// Draw draws the game.
-func (g *Game) Draw(screen *ebiten.Image) {
-	draw(screen)
-}
+## Contributing
 
-// Layout returns the game's screen size.
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return ebiten.ScreenSizeInFullscreen()
-}
+New contributors are welcome!!
+If you have any doubt related to its working you can ask to us by opening an issue
+
+## License
+
+`LICENSE.md` file
+
+## Acknowledgments
+
+Inspired from [Coding Train - Daniel Shiffman](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
 ```
