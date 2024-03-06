@@ -6,6 +6,6 @@ import "physix/pkg/vector"
 type RigidBody struct {
 	Position vector.Vector
 	Velocity vector.Vector
-	Mass     float64
-	Circle   Circle  
+	Force vector.Vector
+	Mass     float64 
 }

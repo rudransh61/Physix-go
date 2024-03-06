@@ -16,7 +16,7 @@ var (
 
 func update() error {
 	// Update the physix simulation
-	physix.UpdateRigidBody(ball, vector.Vector{X: 0, Y: 2}, dt)
+	physix.ApplyForce(ball, vector.Vector{X: 0, Y: 2}, dt)
 
 	return nil
 }

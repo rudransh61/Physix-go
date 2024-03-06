@@ -17,7 +17,7 @@ var (
 func update() error {
 	// Apply a force to simulate gravity
 	gravity := vector.Vector{X: 0, Y: 2}
-	physix.UpdateRigidBody(ball, gravity, dt)
+	physix.ApplyForce(ball, gravity, dt)
 
 	// Bounce off the walls
 	if ball.Position.X < 0 || ball.Position.X > 400 {
