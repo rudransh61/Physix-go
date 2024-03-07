@@ -2,6 +2,10 @@
 
 A simple Physics Engine in GoLang
 
+<div algin="center">
+  <img src="/example.gif" width="200">
+</div>
+
 ## Table of Contents
 
 - [Introduction](#introduction)
