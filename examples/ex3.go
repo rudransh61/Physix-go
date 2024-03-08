@@ -45,6 +45,7 @@ func main() {
 		Position: vector.Vector{X: 100, Y: 200},
 		Velocity: vector.Vector{X: 50, Y: -50},
 		Mass:     1,
+		IsMovable : true,
 	}
 
 	// Run the game loop

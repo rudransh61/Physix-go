@@ -45,31 +45,27 @@ func update() error {
 	checkwall(ball2)
 	checkwall(ball3)
 
-	if(collision.RectangleCollided(ball,ball2,70,70,70,70)){
+	if(collision.RectangleCollided(ball,ball2)){
 		fmt.Println("Collided!")
-	}
-	if(collision.RectangleCollided(ball3,ball2,70,70,70,70)){
-		fmt.Println("Collided!")
-	}
-	if(collision.RectangleCollided(ball3,ball,70,70,70,70)){
-		fmt.Println("Collided!")
-	}
-	if(CheckBall(ball,ball2)){
 		collision.BounceOnCollision(ball,ball2,1.0)
 	}
-	if(CheckBall(ball,ball3)){
-		collision.BounceOnCollision(ball,ball3,1.0)
-	}
-	if(CheckBall(ball3,ball2)){
+	if(collision.RectangleCollided(ball3,ball2)){
+		fmt.Println("Collided!")
 		collision.BounceOnCollision(ball3,ball2,1.0)
+	}
+	if(collision.RectangleCollided(ball3,ball)){
+		fmt.Println("Collided!")
+		collision.BounceOnCollision(ball,ball3,1.0)
 	}
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 70, 70, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
-	ebitenutil.DrawRect(screen, ball2.Position.X, ball2.Position.Y, 70, 70, color.RGBA{R: 0, G: 0, B: 0xff, A: 0xff})
-	ebitenutil.DrawRect(screen, ball3.Position.X, ball3.Position.Y, 70, 70, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, ball.Width, ball.Height, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, ball2.Position.X, ball2.Position.Y, ball2.Width, ball2.Height, color.RGBA{R: 0, G: 0, B: 0xff, A: 0xff})
+	ebitenutil.DrawRect(screen, ball3.Position.X, ball3.Position.Y, ball3.Width, ball3.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	
+	//Boundary
 	ebitenutil.DrawRect(screen, 690.0, 100.0 ,10,600, color.RGBA{R:0,G:0xff,B:0,A:0})
 	ebitenutil.DrawRect(screen, 90.0, 100.0 ,10,600, color.RGBA{R:0,G:0xff,B:0,A:0})
 	ebitenutil.DrawRect(screen, 90.0, 100.0 ,600,10, color.RGBA{R:0,G:0xff,B:0,A:0})
@@ -87,13 +83,14 @@ func main() {
 		Velocity: vector.Vector{X: 50, Y: -50},
 		Mass:     1,
 		Shape : "Rectangle",
-		Width : 70,
-		Height : 70,
+		Width : 100,
+		Height : 90,
+		IsMovable : true,
 	}
 	ball2 = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 400, Y: 300},
 		Velocity: vector.Vector{X: 60, Y: 50},
-		Mass:     1,
+		Mass:     2,
 		Shape : "Rectangle",
 		Width : 70,
 		Height : 70,
@@ -101,10 +98,11 @@ func main() {
 	ball3 = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 400, Y: 400},
 		Velocity: vector.Vector{X: -60, Y: 50},
-		Mass:     5,
+		Mass:     3,
 		Shape : "Rectangle",
-		Width : 70,
+		Width : 100,
 		Height : 70,
+		IsMovable : true,
 	}
 
 	// Run the game loop

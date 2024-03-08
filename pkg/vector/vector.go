@@ -44,3 +44,9 @@ func (v Vector) Normalize() Vector {
 	}
 	return v.Scale(1 / magnitude)
 }
+
+
+// Calculate distance between to 2 heads of Vector
+func Distance(v1 Vector , v2 Vector) float64 {
+	return math.Sqrt(     ((v2.X-v1.X)*(v2.X-v1.X))    +    ((v2.Y-v1.Y)*(v2.Y-v1.Y))    )
+}
