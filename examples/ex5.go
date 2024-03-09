@@ -20,12 +20,26 @@ var (
 
 func checkwall(ball *rigidbody.RigidBody){
 	// Bounce off the walls
-	if ball.Position.X < 100 || ball.Position.X > 600 {
-		ball.Velocity.X *= -1
+	// if ball.Position.X < 100 || ball.Position.X > 600 {
+	// 	ball.Velocity.X *= -1
+	// }
+	// if ball.Position.Y < 100 || ball.Position.Y > 600 {
+	// 	ball.Velocity.Y *= -1
+	// }
+
+	if ball.Position.X < 100{
+		ball.Velocity = ball.Position.Sub(vector.Vector{X:100,Y:ball.Position.Y}).Normalize().Scale(ball.Velocity.Magnitude()).Scale(-1)
 	}
-	if ball.Position.Y < 100 || ball.Position.Y > 600 {
-		ball.Velocity.Y *= -1
+	if ball.Position.X > 600{
+		ball.Velocity = vector.Vector{X:600,Y:ball.Position.Y}.Sub(ball.Position).Normalize().Scale(ball.Velocity.Magnitude())
 	}
+	if ball.Position.Y > 600{
+		ball.Velocity = vector.Vector{X:ball.Position.X,Y:600}.Sub(ball.Position).Normalize().Scale(ball.Velocity.Magnitude())
+	}
+	if ball.Position.Y < 100{
+		ball.Velocity = ball.Position.Sub(vector.Vector{X:ball.Position.X,Y:100}).Normalize().Scale(ball.Velocity.Magnitude()).Scale(-1)
+	}
+
 }
 
 func CheckBall(rect1, rect2 *rigidbody.RigidBody) bool {
@@ -47,7 +61,7 @@ func update() error {
 
 	if(collision.RectangleCollided(ball,ball2)){
 		fmt.Println("Collided!")
-		collision.BounceOnCollision(ball,ball2,1.0)
+		collision.BounceOnCollision(ball,ball2,0.5)
 	}
 	if(collision.RectangleCollided(ball3,ball2)){
 		fmt.Println("Collided!")
@@ -81,7 +95,7 @@ func main() {
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 100, Y: 200},
 		Velocity: vector.Vector{X: 50, Y: -50},
-		Mass:     1,
+		Mass:     1.0,
 		Shape : "Rectangle",
 		Width : 100,
 		Height : 90,
@@ -90,15 +104,16 @@ func main() {
 	ball2 = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 400, Y: 300},
 		Velocity: vector.Vector{X: 60, Y: 50},
-		Mass:     2,
+		Mass:     2.0,
 		Shape : "Rectangle",
 		Width : 70,
 		Height : 70,
+		IsMovable : true,
 	}
 	ball3 = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 400, Y: 400},
 		Velocity: vector.Vector{X: -60, Y: 50},
-		Mass:     3,
+		Mass:     3.0,
 		Shape : "Rectangle",
 		Width : 100,
 		Height : 70,

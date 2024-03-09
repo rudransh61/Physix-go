@@ -29,7 +29,16 @@ func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
 
 	rect1.Velocity = v1.Scale((m1-e*m2)/(m1+m2)).Add(v2.Scale((1+e)*m2/(m1+m2)))  
 	rect2.Velocity = v2.Scale((m2-e*m1)/(m1+m2)).Add(v1.Scale((1+e)*m1/(m1+m2)))  
+	
+	// rect1.Velocity = v1.Sub((rect1.Position.Sub(rect2.Position)).Scale((rect1.Velocity.Sub(rect2.Velocity)).InnerProduct(rect1.Position.Sub(rect2.Position))*((2*m2)/((m1+m2)*(vector.Distance(rect1.Position,rect2.Position)*(vector.Distance(rect2.Position,rect1.Position)))))))
+	
+	// rect2.Velocity = v2.Sub((rect2.Position.Sub(rect1.Position)).Scale((rect2.Velocity.Sub(rect1.Velocity)).InnerProduct(rect2.Position.Sub(rect1.Position))*((2*m1)/((m2+m1)*(vector.Distance(rect1.Position,rect2.Position)*(vector.Distance(rect2.Position,rect1.Position)))))))
+
+
 }
+
+
+// Circle collision detection
 
 func CircleCollided(circle1 *rigidbody.RigidBody, circle2 *rigidbody.RigidBody) bool {
 	if(circle1.Shape==circle2.Shape && circle1.Shape=="Circle"){
