@@ -21,21 +21,25 @@ func RectangleCollided(rect1 *rigidbody.RigidBody, rect2 *rigidbody.RigidBody) b
 }
 
 func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
-	// Calculate the center of mass velocities
-	v1 := rect1.Velocity
-	m1 := rect1.Mass
-	v2 := rect2.Velocity
-	m2 := rect2.Mass
+    if rect1.IsMovable && rect2.IsMovable {
+        // Calculate the center of mass velocities
+        v1 := rect1.Velocity
+        m1 := rect1.Mass
+        v2 := rect2.Velocity
+        m2 := rect2.Mass
 
-	rect1.Velocity = v1.Scale((m1-e*m2)/(m1+m2)).Add(v2.Scale((1+e)*m2/(m1+m2)))  
-	rect2.Velocity = v2.Scale((m2-e*m1)/(m1+m2)).Add(v1.Scale((1+e)*m1/(m1+m2)))  
-	
-	// rect1.Velocity = v1.Sub((rect1.Position.Sub(rect2.Position)).Scale((rect1.Velocity.Sub(rect2.Velocity)).InnerProduct(rect1.Position.Sub(rect2.Position))*((2*m2)/((m1+m2)*(vector.Distance(rect1.Position,rect2.Position)*(vector.Distance(rect2.Position,rect1.Position)))))))
-	
-	// rect2.Velocity = v2.Sub((rect2.Position.Sub(rect1.Position)).Scale((rect2.Velocity.Sub(rect1.Velocity)).InnerProduct(rect2.Position.Sub(rect1.Position))*((2*m1)/((m2+m1)*(vector.Distance(rect1.Position,rect2.Position)*(vector.Distance(rect2.Position,rect1.Position)))))))
-
-
+        rect1.Velocity = v1.Scale((m1 - e*m2) / (m1 + m2)).Add(v2.Scale((1 + e) * m2 / (m1 + m2)))
+        rect2.Velocity = v2.Scale((m2 - e*m1) / (m1 + m2)).Add(v1.Scale((1 + e) * m1 / (m1 + m2)))
+    } else if rect1.IsMovable && !rect2.IsMovable {
+        // Bounce only rect1
+        rect1.Velocity = rect1.Velocity.Scale(-e)
+    } else if !rect1.IsMovable && rect2.IsMovable {
+        // Bounce only rect2
+        rect2.Velocity = rect2.Velocity.Scale(-e)
+    }
+    // No bounce if both are static
 }
+
 
 
 // Circle collision detection

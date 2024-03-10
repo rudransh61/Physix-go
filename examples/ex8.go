@@ -1,67 +1,80 @@
 package main
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
 	"physix/internal/physics"
 	"physix/pkg/rigidbody"
 	"physix/pkg/vector"
-	"math/rand"
+	"physix/internal/collision"
+	// "fmt"
 )
 
 var (
-	particles []*rigidbody.RigidBody
-	dt        = 0.1
+	ball     *rigidbody.RigidBody
+	platform *rigidbody.RigidBody
+	dt       = 0.1
 )
 
-const numParticles = 10
-
 func update() error {
-	for _, particle := range particles {
-		// Update the physix simulation for each particle
-		physix.ApplyForce(particle, calculateRandomForce(), dt)
-		// physix.UpdateRigidBody(particle, dt)
+	// Handle input for the platform movement
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		ball.Position.X += -50*dt
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		ball.Position.X += 50*dt
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+		ball.Velocity.Y -= 10
+	}
 
-		// Print the velocity of each particle
-		fmt.Println("Velocity:", particle.Velocity.X, particle.Velocity.Y)
+	// Update the physics simulation
+	physix.ApplyForce(ball, ball.Force, dt)
+	physix.ApplyForce(platform, ball.Force, dt)
+	ball.Force.Y = 5
+	// Check for collision between ball and platform
+	if collision.RectangleCollided(ball, platform) {
+		// fmt.Println("Bounced!")
+		// collision.BounceOnCollision(ball, platform, 0)
+		ball.Force.Y = 0
+		ball.Velocity.Y=0
 	}
 
 	return nil
 }
 
-func calculateRandomForce() vector.Vector {
-	// Calculate a random force for particle movement
-	return vector.Vector{
-		X: (rand.Float64() - 0.5) * 10, // Adjust the force magnitude as needed
-		Y: (rand.Float64() - 0.5) * 10, // Adjust the force magnitude as needed
-	}
-}
-
 func draw(screen *ebiten.Image) {
-	// Draw each particle using the physix engine's position
-	for _, particle := range particles {
-		ebitenutil.DrawCircle(screen, particle.Position.X, particle.Position.Y, particle.Radius, color.RGBA{R: 0xff, G: 0, B: 0xff, A: 0xff})
-	}
+	// Draw the rectangle using the physics engine's position
+	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, ball.Width, ball.Height, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, platform.Position.X, platform.Position.Y, platform.Width, platform.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
 }
 
 func main() {
 	// Set up the window
 	ebiten.SetWindowSize(400, 400)
-	ebiten.SetWindowTitle("Particle Simulation")
+	ebiten.SetWindowTitle("Bouncing Ball - feat Gravity")
 
-	// Initialize particles with your physix engine
-	particles = make([]*rigidbody.RigidBody, numParticles)
-	for i := 0; i < numParticles; i++ {
-		particles[i] = &rigidbody.RigidBody{
-			Position: vector.Vector{X: rand.Float64() * 400, Y: rand.Float64() * 400},
-			Velocity: vector.Vector{X: (rand.Float64() - 0.5) * 10, Y: (rand.Float64() - 0.5) * 10},
-			Mass:     1,
-			IsMovable: true,
-			Shape:    "Circle",
-			Radius:   10,
-		}
+	// Initialize a rigid body with your physics engine
+	ball = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 400, Y: 100},
+		Velocity:  vector.Vector{X: 0, Y: 2},
+		Mass:      1,
+		Force:     vector.Vector{X: 0, Y: 5},
+		IsMovable: true,
+		Shape:     "Rectangle",
+		Width:     50,
+		Height:    50,
+	}
+
+	platform = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 100, Y: 600},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      rigidbody.Infinite_mass,
+		IsMovable: true,
+		Shape:     "Rectangle",
+		Width:     1000,
+		Height:    50,
 	}
 
 	// Run the game loop

@@ -137,6 +137,48 @@ Every RigidBody have following properties :-
 </pre>
 
 
+## RigidBody
+To create an instance of RigidBody you need to provide all the required fields .
+
+First Import these files,
+```golang
+import (
+  "physix/internal/physics"
+	"physix/pkg/rigidbody"
+)
+```
+
+Example :-
+```golang
+ball = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 400, Y: 100},
+		Velocity:  vector.Vector{X: 0, Y: 2},
+		Mass:      1,
+		Force:     vector.Vector{X: 0, Y: 5},
+		IsMovable: true,
+		Shape:     "Rectangle",
+		Width:     50,
+		Height:    50,
+	}
+```
+
+To update position of a RigidBody, Use <b>ApplyForce</b> in a loop ,
+Example :- 
+```golang
+for i := 0; i < 100; i++ {
+        physix.ApplyForce(ball1, vector.Vector{X: 10, Y: 0}, dt) // Make the vector (0,0) to apply no force
+        // .. other code
+    }
+```
+
+To access or change the  <b>Force</b> , <b>Velocity</b> , <b>Position</b>,
+```golang
+ball.Velocity // Get the velocity of ball as a vector.Vector
+ball.Position.X += 5 // Increase the position of ball in X direction by 5
+```
+
+
+
 ## Examples
 
 Check examples in `./example` folder

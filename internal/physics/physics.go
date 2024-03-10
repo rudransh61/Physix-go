@@ -11,6 +11,7 @@ func ApplyForce(rb *rigidbody.RigidBody, force vector.Vector,dt float64) {
 	if(rb.IsMovable){
 		// Use Newton's second law: F = ma -> a = F/m
 		// rb.Force = rb.Force.Add(force)
+		
 		rb.Force = force
 		acceleration := rb.Force.Scale(1 / rb.Mass)
 
