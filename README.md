@@ -177,6 +177,59 @@ ball.Velocity // Get the velocity of ball as a vector.Vector
 ball.Position.X += 5 // Increase the position of ball in X direction by 5
 ```
 
+## Collision Detection
+There are 2 types of collision systems for different shapes.
+ - Rectangle-Rectangle collision
+ - Circle-Circle collision
+
+### Rectangle Collision
+For example you have 2 Rectangles, Like this :-
+```golang
+rect = &rigidbody.RigidBody{
+	Position: vector.Vector{X: 100, Y: 200},
+	Velocity: vector.Vector{X: 50, Y: -50},
+	Mass:     1.0,
+	Shape : "Rectangle",
+	Width : 100,
+	Height : 90,
+	IsMovable : true,
+}
+rect2 = &rigidbody.RigidBody{
+	Position: vector.Vector{X: 400, Y: 300},
+	Velocity: vector.Vector{X: 60, Y: 50},
+	Mass:     2.0,
+	Shape : "Rectangle",
+	Width : 70,
+	Height : 70,
+	IsMovable : true,
+}
+```
+
+Now you want to detect collision between them ,
+```golang
+if(collision.RectangleCollided(rect,rect2)){
+	fmt.Println("Collided!")
+}
+```
+
+And if you want to add a bounce effect in this collision according to the <b>Momentum Conservation</b> and <b>Energy Conservation</b>,
+```golang
+if(collision.RectangleCollided(rect,rect2)){
+	float64 e = 0.9999999999;                // e is coefficient of restitution in collision
+	collision.BounceOnCollision(ball,ball2,e)// NOTE :- e<1 is bit glitchy and goes wild, use it on your own risk :)
+}
+```
+==NOTE :- e<1 is bit glitchy and goes wild, use it on your own risk :) ==
+
+### Circle Collision
+
+Now if you want to detect collisions between a circle and a circle,
+```golang
+if(collision.CircleCollided(rect,rect2)){
+	fmt.Println("Collided!")
+}
+```
+And same <a href='#'>BounceOnCollision</a> function for Bouncing ...
 
 
 ## Examples
