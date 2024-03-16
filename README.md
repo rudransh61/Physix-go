@@ -1,6 +1,10 @@
-# Physix.go
+<u><h1> Physix.go</h1></u>
 
-A simple Physics Engine in GoLang
+<div algin="center" style="margin-bottom:100px">
+	<h2>A simple Physics Engine in GoLang☻</h2>
+  <img src="/Phi 6.png" width="300">
+</div>
+
 
 <div algin="center">
   <img src="/example.gif" width="200">
