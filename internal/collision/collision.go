@@ -3,6 +3,7 @@ package collision
 
 import (
 	"physix/pkg/rigidbody"
+	"physix/pkg/polygon"
 	// "math"
 	"physix/pkg/vector"
 )
@@ -53,4 +54,59 @@ func CircleCollided(circle1 *rigidbody.RigidBody, circle2 *rigidbody.RigidBody) 
 		}
 	}
 	return false
+}
+
+
+// Polygon collision detection SAT implementation.
+// Link : https://dyn4j.org/2010/01/sat/
+
+// Project calculates the projection of a polygon onto a given axis.
+func Project(p polygon.Polygon, axis vector.Vector) (float64, float64) {
+	min := axis.InnerProduct(p.Vertices[0])
+	max := min
+	for i := 1; i < len(p.Vertices); i++ {
+		d := axis.InnerProduct(p.Vertices[i])
+		if d < min {
+			min = d
+		} else if d > max {
+			max = d
+		}
+	}
+	return min, max
+}
+
+// Overlap checks if two intervals overlap.
+func Overlap(min1, max1, min2, max2 float64) bool {
+	return !(max1 < min2 || max2 < min1)
+}
+
+// Collides checks if two polygons are colliding using the SAT algorithm.
+func PolygonCollision(poly1, poly2 polygon.Polygon) bool {
+	for i := 0; i < len(poly1.Vertices); i++ {
+		edge := vector.Vector{
+			X: poly1.Vertices[(i+1)%len(poly1.Vertices)].X - poly1.Vertices[i].X,
+			Y: poly1.Vertices[(i+1)%len(poly1.Vertices)].Y - poly1.Vertices[i].Y,
+		}
+		normal := vector.Orthogonal(edge).Normalize()
+		min1, max1 := Project(poly1, normal)
+		min2, max2 := Project(poly2, normal)
+		if !Overlap(min1, max1, min2, max2) {
+			return false
+		}
+	}
+
+	for i := 0; i < len(poly2.Vertices); i++ {
+		edge := vector.Vector{
+			X: poly2.Vertices[(i+1)%len(poly2.Vertices)].X - poly2.Vertices[i].X,
+			Y: poly2.Vertices[(i+1)%len(poly2.Vertices)].Y - poly2.Vertices[i].Y,
+		}
+		normal := vector.Orthogonal(edge).Normalize()
+		min1, max1 := Project(poly1, normal)
+		min2, max2 := Project(poly2, normal)
+		if !Overlap(min1, max1, min2, max2) {
+			return false
+		}
+	}
+
+	return true
 }

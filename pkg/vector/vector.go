@@ -50,3 +50,9 @@ func (v Vector) Normalize() Vector {
 func Distance(v1 Vector , v2 Vector) float64 {
 	return math.Sqrt(     ((v2.X-v1.X)*(v2.X-v1.X))    +    ((v2.Y-v1.Y)*(v2.Y-v1.Y))    )
 }
+
+
+// Orthogonal computes the perpendicular vector of a given vector.
+func Orthogonal(v Vector) Vector {
+	return Vector{-v.Y, v.X}
+}

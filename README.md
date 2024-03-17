@@ -119,6 +119,11 @@ var NormalizeVector = Vec1.Normalize()
 var distance = vector.Distance(Vec1,Vec2)
 ```
 
+##### Perpendicular Vector of a given Vector
+```go
+vector.Vector Orthogonal_Vector = vector.Orthogonal(Vec1)
+```
+
 ## Basics
 In this Physics Engine , we call every physical entity a : <b>RigidBody</b>
 
