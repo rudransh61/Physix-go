@@ -43,5 +43,7 @@ func ApplyForcePolygon(pg *polygon.Polygon, force vector.Vector, dt float64) {
 			pg.Vertices[i].X += pg.Velocity.X * dt
 			pg.Vertices[i].Y += pg.Velocity.Y * dt
 		}
+
+		pg.UpdatePosition()
 	}
 }

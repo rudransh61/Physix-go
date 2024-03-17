@@ -39,3 +39,8 @@ func calculateCentroid(vertices []vector.Vector) vector.Vector {
 	centroid.Y /= float64(len(vertices))
 	return centroid
 }
+
+//Update position of polygon
+func (p *Polygon) UpdatePosition(){
+	p.Position = calculateCentroid(p.Vertices)
+}
