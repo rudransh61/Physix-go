@@ -50,11 +50,11 @@ To start , Clone this project
 git clone https://github.com/rudransh61/Physix.go
 ```
 
-Then Run the example files from `./example` folder
+Then Run the example files from `./examples` folder
 
 for example : 
 ```
-go run ./example/ex4.go //which is simple circular motion
+go run ./examples/ex4.go //which is simple circular motion
 ```
 
 ## Documentation
