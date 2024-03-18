@@ -19,8 +19,8 @@ var (
 
 func update() error {
 	// Apply a force to simulate gravity
-	gravity := vector.Vector{X: 0, Y: 10}
-	physix.ApplyForcePolygon(ball, gravity, dt)
+	gravity := vector.Vector{X: 0, Y: 0.1}
+	physix.ApplyForcePolygon(ball, vector.Vector{0,0}, dt)
 	physix.ApplyForcePolygon(ball2, gravity, dt)
 
 	if ball.Position.Y < 0 || ball.Position.Y > 400 {
@@ -30,8 +30,12 @@ func update() error {
 
 	if(collision.PolygonCollision(*ball, *ball2)){
 		fmt.Println("collision")
-	}
+		collisionNormal := collision.CalculateCollisionNormal(*ball, *ball2)
 
+		// Resolve collision
+		collision.ResolveCollision(ball, ball2, collisionNormal)
+	}
+	fmt.Println(ball.Position.X)
 	return nil
 }
 
@@ -64,11 +68,11 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Bouncing Ball")
 
-	vertices := []vector.Vector{{X: 150, Y: 50}, {X: 100, Y: 100}, {X: 100, Y: 50}, {X: 250, Y: 200}}
+	vertices := []vector.Vector{{X: 250, Y: 50}, {X: 200, Y: 100}, {X: 200, Y: 50}, {X: 350, Y: 200}}
 
 	// Initialize a rigid body with your physix engine
-	ball = polygon.NewPolygon(vertices, 5.0, true)
-	ball2 = polygon.NewPolygon( []vector.Vector{{X: 100, Y: 50}, {X: 50, Y: 100}, {X: 50, Y: 50}, {X: 200, Y: 200}}, 5.0, true)
+	ball = polygon.NewPolygon(vertices, 0.50, true)
+	ball2 = polygon.NewPolygon( []vector.Vector{{X: 100, Y: 50}, {X: 50, Y: 100}, {X: 50, Y: 50}, {X: 200, Y: 200}}, 0.50, true)
 	ball2.Velocity.X = 10.0
 	// Run the game loop
 	if err := ebiten.RunGame(&Game{}); err != nil {

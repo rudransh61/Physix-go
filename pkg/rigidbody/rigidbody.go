@@ -18,6 +18,9 @@ type RigidBody struct {
 	Height      float64
 	Radius      float64
 	IsMovable   bool
+	Torque      float64 
+    AngularVelocity float64 
+    AngularAcceleration float64 
 }
 
 // Rotate any body
@@ -40,4 +43,18 @@ func (rb *RigidBody) rotateCoordinates(theta float64) (vector.Vector) {
 	newY := rotationMatrix[1][0]*x + rotationMatrix[1][1]*y
 
 	return vector.Vector{X:newX, Y:newY}
+}
+
+
+// UpdateRotation updates the rotation of the rigid body based on its angular velocity.
+func (rb *RigidBody) UpdateRotation(dt float64) {
+    // Update rotation based on angular velocity
+    angle := rb.AngularVelocity * dt
+    rb.Position.X = math.Cos(angle)*rb.Position.X - math.Sin(angle)*rb.Position.Y
+    rb.Position.Y = math.Sin(angle)*rb.Position.X + math.Cos(angle)*rb.Position.Y
+}
+
+// ApplyTorque applies a torque to the rigid body.
+func (rb *RigidBody) ApplyTorque(torque float64) {
+    rb.Torque += torque
 }

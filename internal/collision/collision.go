@@ -110,3 +110,83 @@ func PolygonCollision(poly1, poly2 polygon.Polygon) bool {
 
 	return true
 }
+
+// CalculateCollisionNormal calculates the collision normal between two polygons
+func CalculateCollisionNormal(poly1, poly2 polygon.Polygon) vector.Vector {
+	// Implement collision normal calculation
+	// For simplicity, let's calculate the average normal of all edges
+	// Calculate the edges of both polygons
+	edges1 := calculateEdges(poly1.Vertices)
+	edges2 := calculateEdges(poly2.Vertices)
+
+	// Calculate normals of edges
+	normals1 := calculateNormals(edges1)
+	normals2 := calculateNormals(edges2)
+
+	// Find the average normal of the edges
+	averageNormal := averageVector(normals1...)
+	averageNormal = averageNormal.Add(averageVector(normals2...))
+	averageNormal = averageNormal.Normalize()
+
+	return averageNormal
+}
+
+// ResolveCollision resolves collision between two polygons
+func ResolveCollision(poly1, poly2 *polygon.Polygon, normal vector.Vector) {
+    // Calculate relative velocity
+    relativeVelocity := poly2.Velocity.Sub(poly1.Velocity)
+
+    // Calculate relative velocity in terms of the normal direction
+    velocityAlongNormal := relativeVelocity.InnerProduct(normal)
+
+    // If velocities are separating, do not resolve collision
+    if velocityAlongNormal > 0 {
+        return
+    }
+
+    // Calculate restitution (bounciness)
+    restitution := 2.0 // Example restitution coefficient
+
+    // Calculate impulse scalar
+    impulseScalar := -(1 + restitution) * velocityAlongNormal / (1 / poly1.Mass + 1 / poly2.Mass)
+
+    // Apply impulse to the polygons
+    impulse := normal.Scale(impulseScalar)
+
+    poly1.Velocity = poly1.Velocity.Add(impulse.Scale(1 / poly1.Mass)).Scale(2)
+    poly2.Velocity = poly2.Velocity.Sub(impulse.Scale(1 / poly2.Mass)).Scale(2)
+}
+
+// Helper function to calculate the dot product of two vectors
+func dotProduct(v1, v2 vector.Vector) float64 {
+	return v1.X*v2.X + v1.Y*v2.Y
+}
+
+// Helper function to calculate edges from polygon vertices
+func calculateEdges(vertices []vector.Vector) []vector.Vector {
+	edges := make([]vector.Vector, len(vertices))
+	for i := 0; i < len(vertices); i++ {
+		nextIndex := (i + 1) % len(vertices)
+		edges[i] = vertices[nextIndex].Sub(vertices[i])
+	}
+	return edges
+}
+
+// Helper function to calculate normals from edges
+func calculateNormals(edges []vector.Vector) []vector.Vector {
+	normals := make([]vector.Vector, len(edges))
+	for i, edge := range edges {
+		// Calculate normal by rotating edge by 90 degrees counter-clockwise
+		normals[i] = vector.Vector{X: -edge.Y, Y: edge.X}
+	}
+	return normals
+}
+
+// Helper function to calculate the average vector from multiple vectors
+func averageVector(vectors ...vector.Vector) vector.Vector {
+	sum := vector.Vector{}
+	for _, v := range vectors {
+		sum = sum.Add(v)
+	}
+	return sum.Scale(1 / float64(len(vectors)))
+}
