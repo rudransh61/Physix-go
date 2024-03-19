@@ -44,3 +44,20 @@ func calculateCentroid(vertices []vector.Vector) vector.Vector {
 func (p *Polygon) UpdatePosition(){
 	p.Position = calculateCentroid(p.Vertices)
 }
+
+
+
+// IMPART Impulse on a body
+func (rb *Polygon) ApplyImpulse(impulse vector.Vector) {
+    // Calculate the change in velocity using impulse and mass
+    deltaV := vector.Vector{
+        X: impulse.X / rb.Mass,
+        Y: impulse.Y / rb.Mass,
+    }
+
+	// Update everything
+    for i := range rb.Vertices {
+        rb.Vertices[i].X += deltaV.X
+        rb.Vertices[i].Y += deltaV.Y
+    }
+}

@@ -26,7 +26,11 @@ func update() error {
 		ball.Position.X += 50*dt
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyUp) {
-		ball.Velocity.Y -= 10
+		ball.Velocity.Y -= 5
+	}
+
+	if(ball.Position.Y <0 ){
+		ball.Velocity.Y = 0;
 	}
 
 	// Update the physics simulation

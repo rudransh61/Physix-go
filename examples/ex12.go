@@ -27,14 +27,12 @@ func update() error {
 		ball.Velocity.Y = -10
 		// fmt.Println(ball.Velocity)
 	}
-
-	if(collision.PolygonCollision(*ball, *ball2)){
+	if collision.PolygonCollision(*ball, *ball2) {
 		fmt.Println("collision")
-		collisionNormal := collision.CalculateCollisionNormal(*ball, *ball2)
-
-		// Resolve collision
-		collision.ResolveCollision(ball, ball2, collisionNormal)
-	}
+        // If colliding, handle collision response
+        collisionNormal := collision.CalculateCollisionNormal(ball, ball2)
+        collision.HandleCollisionResponse(*ball, *ball2, collisionNormal)
+    }
 	fmt.Println(ball.Position.X)
 	return nil
 }
