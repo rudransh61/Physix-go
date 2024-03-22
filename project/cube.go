@@ -1,95 +1,74 @@
 package main
 
 import (
-	"fmt"
+	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"math"
 	"image/color"
-
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"physix/pkg/matrices" // Update this with your actual module path
 )
 
-type Game struct{}
-
-var (
-	cubeVertices = [][]float64{
-		{-1.0, -1.0, -1.0},
-		{-1.0, -1.0, 1.0},
-		{-1.0, 1.0, -1.0},
-		{-1.0, 1.0, 1.0},
-		{1.0, -1.0, -1.0},
-		{1.0, -1.0, 1.0},
-		{1.0, 1.0, -1.0},
-		{1.0, 1.0, 1.0},
-	}
-
-	cubeEdges = [][]int{
-		{0.0, 1.0}, {1.0, 3.0}, {3.0, 2.0}, {2.0, 0.0},
-		{4.0, 5.0}, {5.0, 7.0}, {7.0, 6.0}, {6.0, 4.0},
-		{0.0, 4.0}, {1.0, 5.0}, {2.0, 6.0}, {3.0, 7.0},
-	}
-
+const (
 	screenWidth  = 640
 	screenHeight = 480
-
-	rotationAngles = []float64{0, 0, 0}
 )
 
-func (g *Game) Update() error {
-	// Clear the screen
-	// ebiten.Screen.Fill(color.RGBA{0, 0, 0, 255})
-
-	// Rotate the cube around x, y, and z axes
-	rotationMatrix := matrices.Identity3
-	rotationMatrix = matrices.Multiply(rotationMatrix, matrices.RotationZ(rotationAngles[2]))
-	rotationMatrix = matrices.Multiply(rotationMatrix, matrices.RotationY(rotationAngles[1]))
-	rotationMatrix = matrices.Multiply(rotationMatrix, matrices.RotationX(rotationAngles[0]))
-
-	// Project and draw each edge of the cube
-	for _, edge := range cubeEdges {
-		// Convert vertices to matrices
-		vertex1Matrix := [][]float64{cubeVertices[edge[0]]}
-		vertex2Matrix := [][]float64{cubeVertices[edge[1]]}
-
-		// Rotate vertices
-		vertex1 := matrices.Multiply(vertex1Matrix, rotationMatrix)[0]
-		vertex2 := matrices.Multiply(vertex2Matrix, rotationMatrix)[0]
-
-		// Draw the line
-		drawLine(vertex1[0], vertex1[1], vertex2[0], vertex2[1], color.White)
+var (
+	cubeVertices = [8][3]float64{
+		{-1, -1, -1}, {-1, 1, -1}, {1, 1, -1}, {1, -1, -1},
+		{-1, -1, 1}, {-1, 1, 1}, {1, 1, 1}, {1, -1, 1},
 	}
+	cubeFaces = [6][4]int{
+		{0, 1, 2, 3}, {1, 5, 6, 2}, {5, 4, 7, 6},
+		{4, 0, 3, 7}, {0, 1, 5, 4}, {3, 2, 6, 7},
+	}
+)
 
-	// Increase rotation angles for animation
-	rotationAngles[0] += 0.01
-	rotationAngles[1] += 0.005
-	rotationAngles[2] += 0.002
+type Game struct {
+	angle float64
+}
 
+func (g *Game) Update(screen *ebiten.Image) error {
+	g.angle += 0.02
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	// Drawing is handled in the Update method
+	for _, face := range cubeFaces {
+		var points [4][2]float64
+		for i, v := range face {
+			x := cubeVertices[v][0]
+			y := cubeVertices[v][1]
+			z := cubeVertices[v][2]
+
+			// Rotate around the y-axis
+			x, z = x*math.Cos(g.angle)-z*math.Sin(g.angle), x*math.Sin(g.angle)+z*math.Cos(g.angle)
+
+			// Rotate around the x-axis
+			y, z = y*math.Cos(g.angle)-z*math.Sin(g.angle), y*math.Sin(g.angle)+z*math.Cos(g.angle)
+
+			// Projection
+			scale := 200 / (z + 3)
+			points[i][0] = x*scale + screenWidth/2
+			points[i][1] = y*scale + screenHeight/2
+		}
+
+		// Draw the face of the cube with the specified color
+		ebitenutil.DrawLine(screen, points[0][0], points[0][1], points[1][0], points[1][1], color.RGBA{R: 255, G: 0, B: 0, A: 255})
+		ebitenutil.DrawLine(screen, points[1][0], points[1][1], points[2][0], points[2][1], color.RGBA{R: 255, G: 0, B: 0, A: 255})
+		ebitenutil.DrawLine(screen, points[2][0], points[2][1], points[3][0], points[3][1], color.RGBA{R: 255, G: 0, B: 0, A: 255})
+		ebitenutil.DrawLine(screen, points[3][0], points[3][1], points[0][0], points[0][1], color.RGBA{R: 255, G: 0, B: 0, A: 255})
+	}
 }
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	// Set the screen size
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
 }
 
-func drawLine(x1, y1, x2, y2 float64, clr color.Color) {
-	ebitenutil.DrawLine(screen, x1, y1, x2, y2, clr)
-}
-
 func main() {
-	// Create a new window with the specified size
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Rotating Cube")
-
-	// Create an instance of the Game struct
 	game := &Game{}
-
-	// Run the game loop
 	if err := ebiten.RunGame(game); err != nil {
-		fmt.Println("Error:", err)
+		panic(err)
 	}
 }
