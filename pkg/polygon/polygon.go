@@ -16,20 +16,21 @@ type Polygon struct {
 func NewPolygon(vertices []vector.Vector, mass float64, IsMovable bool) *Polygon {
 	polygon := &Polygon{
 		RigidBody: rigidbody.RigidBody{
-			Position:  calculateCentroid(vertices),
+			Position:  CalculateCentroid(vertices),
 			Velocity:  vector.Vector{X: 0, Y: 0},
 			Force:     vector.Vector{X: 0, Y: 0},
 			Mass:      mass,
 			Shape:     "polygon",
 			IsMovable: IsMovable,
+			Restitution : 1.0,
 		},
 		Vertices: vertices,
 	}
 	return polygon
 }
 
-// calculateCentroid calculates the centroid of a polygon given its vertices.
-func calculateCentroid(vertices []vector.Vector) vector.Vector {
+// CalculateCentroid calculates the centroid of a polygon given its vertices.
+func CalculateCentroid(vertices []vector.Vector) vector.Vector {
 	var centroid vector.Vector
 	for _, v := range vertices {
 		centroid.X += v.X
@@ -42,7 +43,7 @@ func calculateCentroid(vertices []vector.Vector) vector.Vector {
 
 //Update position of polygon
 func (p *Polygon) UpdatePosition(){
-	p.Position = calculateCentroid(p.Vertices)
+	p.Position = CalculateCentroid(p.Vertices)
 }
 
 
@@ -59,5 +60,27 @@ func (rb *Polygon) ApplyImpulse(impulse vector.Vector) {
     for i := range rb.Vertices {
         rb.Vertices[i].X += deltaV.X
         rb.Vertices[i].Y += deltaV.Y
+    }
+}
+
+// Project calculates the projection of a polygon onto a given axis.
+func Project(p Polygon, axis vector.Vector) (float64, float64) {
+    min := axis.InnerProduct(p.Vertices[0])
+    max := min
+    for i := 1; i < len(p.Vertices); i++ {
+        d := axis.InnerProduct(p.Vertices[i])
+        if d < min {
+            min = d
+        } else if d > max {
+            max = d
+        }
+    }
+    return min, max
+}
+
+// Move adjusts the position of the polygon by the given displacement vector.
+func (p *Polygon) Move(displacement vector.Vector) {
+    for i := range p.Vertices {
+        p.Vertices[i] = p.Vertices[i].Add(displacement)
     }
 }

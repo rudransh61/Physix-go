@@ -21,6 +21,7 @@ type RigidBody struct {
 	Torque      float64 
     AngularVelocity float64 
     AngularAcceleration float64 
+	Restitution  float64
 }
 
 // Rotate any body

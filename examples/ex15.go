@@ -10,7 +10,7 @@ import (
 	"physix/internal/collision"
 	"math"
 	"math/rand"
-	"fmt"
+	// "fmt"
 )
 
 var (
@@ -21,19 +21,19 @@ var (
 const (
 	Mass     = 2
 	Shape    = "Circle"
-	Radius   = 30
+	Radius   = 10
 )
 
 func checkwall(ball *rigidbody.RigidBody) {
 	// Bounce off the walls
-	if ball.Position.X < 100+ball.Radius || ball.Position.X > 600+2*ball.Radius {
+	if ball.Position.X < 100+ball.Radius || ball.Position.X > 600-ball.Radius {
 		if ball.Position.X < 100+ball.Radius {
 			ball.Velocity.X = math.Abs(ball.Velocity.X*0.7)
 			ball.Position.X = 100+ball.Radius
 		}
-		if ball.Position.X > 600+2*ball.Radius {
+		if ball.Position.X > 600-ball.Radius {
 			ball.Velocity.X = -0.7 * math.Abs(ball.Velocity.X)
-			ball.Position.X = 600+2*ball.Radius
+			ball.Position.X = 600-ball.Radius
 		}
 	}
 	if ball.Position.Y < 100+ball.Radius || ball.Position.Y > 600-ball.Radius {
@@ -49,7 +49,7 @@ func checkwall(ball *rigidbody.RigidBody) {
 }
 
 func update() error {
-	gravity := vector.Vector{X: 0, Y: 10}
+	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
 		physix.ApplyForce(ball, gravity, dt)
 		checkwall(ball)
@@ -58,7 +58,7 @@ func update() error {
 	for i := 0; i < len(balls); i++ {
 		for j := i + 1; j < len(balls); j++ {
 			if collision.CircleCollided(balls[i], balls[j]) {
-				fmt.Println("Collision!")
+				// fmt.Println("Collision!")
 				resolveCollision(balls[i], balls[j])
 				collision.BounceOnCollision(balls[i], balls[j], 1.0)
 			}
@@ -98,10 +98,10 @@ func draw(screen *ebiten.Image) {
 	}
 
 	//Boundary
-	ebitenutil.DrawRect(screen, 690.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // right
+	ebitenutil.DrawRect(screen, 600.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // right
 	ebitenutil.DrawRect(screen, 90.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})   // left
-	ebitenutil.DrawRect(screen, 90.0, 100.0, 600, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})   // up
-	ebitenutil.DrawRect(screen, 90.0, 600.0, 600, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // down
+	ebitenutil.DrawRect(screen, 90.0, 100.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})   // up
+	ebitenutil.DrawRect(screen, 90.0, 600.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // down
 }
 
 func main() {
@@ -110,7 +110,7 @@ func main() {
 	ebiten.SetWindowTitle("Bouncing Balls")
 
 	// Initialize rigid bodies (balls)
-	n := 30 // Change this to the desired number of balls
+	n := 200 // Change this to the desired number of balls
 	initializeBalls(n)
 
 	// Run the game loop

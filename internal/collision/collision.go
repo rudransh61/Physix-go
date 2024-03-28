@@ -4,7 +4,7 @@ package collision
 import (
 	"physix/pkg/rigidbody"
 	"physix/pkg/polygon"
-	// "math"
+	"math"
 	"physix/pkg/vector"
 )
 
@@ -61,7 +61,7 @@ func CircleCollided(circle1 *rigidbody.RigidBody, circle2 *rigidbody.RigidBody) 
 // Link : https://dyn4j.org/2010/01/sat/
 
 // Project calculates the projection of a polygon onto a given axis.
-func Project(p polygon.Polygon, axis vector.Vector) (float64, float64) {
+func Project(p *polygon.Polygon, axis vector.Vector) (float64, float64) {
 	min := axis.InnerProduct(p.Vertices[0])
 	max := min
 	for i := 1; i < len(p.Vertices); i++ {
@@ -81,33 +81,121 @@ func Overlap(min1, max1, min2, max2 float64) bool {
 }
 
 // Collides checks if two polygons are colliding using the SAT algorithm.
-func PolygonCollision(poly1, poly2 polygon.Polygon) bool {
-	for i := 0; i < len(poly1.Vertices); i++ {
-		edge := vector.Vector{
-			X: poly1.Vertices[(i+1)%len(poly1.Vertices)].X - poly1.Vertices[i].X,
-			Y: poly1.Vertices[(i+1)%len(poly1.Vertices)].Y - poly1.Vertices[i].Y,
-		}
-		normal := vector.Orthogonal(edge).Normalize()
-		min1, max1 := Project(poly1, normal)
-		min2, max2 := Project(poly2, normal)
-		if !Overlap(min1, max1, min2, max2) {
-			return false
-		}
-	}
+// If they are colliding, resolves the collision by applying appropriate impulses.
+func PolygonCollision(poly1, poly2 *polygon.Polygon) bool {
+    for i := 0; i < len(poly1.Vertices); i++ {
+        edge := vector.Vector{
+            X: poly1.Vertices[(i+1)%len(poly1.Vertices)].X - poly1.Vertices[i].X,
+            Y: poly1.Vertices[(i+1)%len(poly1.Vertices)].Y - poly1.Vertices[i].Y,
+        }
+        normal := vector.Orthogonal(edge).Normalize()
+        min1, max1 := Project(poly1, normal)
+        min2, max2 := Project(poly2, normal)
+        if !Overlap(min1, max1, min2, max2) {
+            return false
+        }
+    }
 
-	for i := 0; i < len(poly2.Vertices); i++ {
-		edge := vector.Vector{
-			X: poly2.Vertices[(i+1)%len(poly2.Vertices)].X - poly2.Vertices[i].X,
-			Y: poly2.Vertices[(i+1)%len(poly2.Vertices)].Y - poly2.Vertices[i].Y,
-		}
-		normal := vector.Orthogonal(edge).Normalize()
-		min1, max1 := Project(poly1, normal)
-		min2, max2 := Project(poly2, normal)
-		if !Overlap(min1, max1, min2, max2) {
-			return false
-		}
-	}
+    for i := 0; i < len(poly2.Vertices); i++ {
+        edge := vector.Vector{
+            X: poly2.Vertices[(i+1)%len(poly2.Vertices)].X - poly2.Vertices[i].X,
+            Y: poly2.Vertices[(i+1)%len(poly2.Vertices)].Y - poly2.Vertices[i].Y,
+        }
+        normal := vector.Orthogonal(edge).Normalize()
+        min1, max1 := Project(poly1, normal)
+        min2, max2 := Project(poly2, normal)
+        if !Overlap(min1, max1, min2, max2) {
+            return false
+        }
+    }
 
-	return true
+    // If we reach here, the polygons are colliding
+    // Resolve the collision by applying impulses
+    // resolveCollision(poly1, poly2)
+
+    return true
 }
 
+// ResolveCollision resolves the collision between two polygons by applying appropriate impulses.
+func ResolveCollision(poly1, poly2 *polygon.Polygon,e float64) {
+    // Find the MTV (Minimum Translation Vector) to separate the polygons
+    mtv := findMTV(poly1, poly2)
+
+    // Apply the MTV to separate the polygons
+    poly1.Move(mtv)
+    poly2.Move(mtv.Scale(-1))
+
+    // Calculate relative velocity
+    relativeVelocity := poly1.Velocity.Sub(poly2.Velocity)
+
+    // Calculate velocity along the collision normal
+    velocityAlongNormal := relativeVelocity.InnerProduct(mtv)
+
+    // If velocities are separating, no collision resolution needed
+    if velocityAlongNormal > 0 {
+        return
+    }
+
+    // Calculate impulse scalar
+    // e := 0.9 // coefficient of restitution (elasticity)
+    j := -(1.0 + e) * velocityAlongNormal / (1/poly1.Mass + 1/poly2.Mass)
+
+    // Apply impulses to resolve collision
+    impulse := mtv.Scale(j)
+	impulseMag := math.Min(impulse.Magnitude() , 1000.0)
+	impulse = mtv.Normalize().Scale(impulseMag)
+    poly1.ApplyImpulse(impulse)
+    poly2.ApplyImpulse(impulse.Scale(-1))
+}
+
+// findMTV finds the Minimum Translation Vector (MTV) to separate two polygons.
+func findMTV(poly1, poly2 *polygon.Polygon) vector.Vector {
+    minOverlap := math.MaxFloat64
+    mtv := vector.Vector{}
+
+    // Loop through edges of poly1
+    for i := 0; i < len(poly1.Vertices); i++ {
+        edge := poly1.Vertices[(i+1)%len(poly1.Vertices)].Sub(poly1.Vertices[i])
+        normal := vector.Orthogonal(edge).Normalize()
+
+        // Project polygons onto the normal
+        min1, max1 := polygon.Project(*poly1, normal)
+        min2, max2 := polygon.Project(*poly2, normal)
+
+        // Check for overlap
+        overlap := math.Min(max1, max2) - math.Max(min1, min2)
+        if overlap <= 0 {
+            return vector.Vector{} // No overlap, no MTV
+        }
+
+        // Update MTV if this overlap is smaller
+        if overlap < minOverlap {
+            minOverlap = overlap
+            mtv = normal.Scale(overlap)
+        }
+    }
+
+    // Loop through edges of poly2
+    for i := 0; i < len(poly2.Vertices); i++ {
+        edge := poly2.Vertices[(i+1)%len(poly2.Vertices)].Sub(poly2.Vertices[i])
+        normal := vector.Orthogonal(edge).Normalize()
+
+        // Project polygons onto the normal
+        min1, max1 := polygon.Project(*poly1, normal)
+        min2, max2 := polygon.Project(*poly2, normal)
+
+        // Check for overlap
+        overlap := math.Min(max1, max2) - math.Max(min1, min2)
+        if overlap <= 0 {
+            return vector.Vector{} // No overlap, no MTV
+        }
+
+        // Update MTV if this overlap is smaller
+        if overlap < minOverlap {
+            minOverlap = overlap
+            mtv = normal.Scale(overlap)
+        }
+    }
+
+    return mtv
+}
