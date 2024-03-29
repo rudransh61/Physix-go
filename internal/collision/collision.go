@@ -199,3 +199,20 @@ func findMTV(poly1, poly2 *polygon.Polygon) vector.Vector {
 
     return mtv
 }
+
+// CirclePolygonCollision checks collision between a circle and a polygon (rectangle in this case).
+func CirclePolygonCollision(circle *rigidbody.RigidBody, poly *polygon.Polygon) bool {
+    // Translate the circle's position into the coordinate system of the polygon
+    circleX := circle.Position.X - poly.Position.X
+    circleY := circle.Position.Y - poly.Position.Y
+
+    // Closest point on the polygon to the circle
+    closestX, closestY := poly.ClosestPoint(circleX, circleY)
+
+    // Calculate the distance between the circle's center and this closest point
+    distanceX := circleX - closestX
+    distanceY := circleY - closestY
+
+    // If the distance is less than the circle's radius, they are colliding
+    return (distanceX*distanceX + distanceY*distanceY) <= (circle.Radius * circle.Radius)
+}

@@ -3,7 +3,7 @@ package polygon
 import (
 	"physix/pkg/vector"
 	"physix/pkg/rigidbody"
-	// "math"
+	"math"
 )
 
 //Polygon 2d
@@ -83,4 +83,26 @@ func (p *Polygon) Move(displacement vector.Vector) {
     for i := range p.Vertices {
         p.Vertices[i] = p.Vertices[i].Add(displacement)
     }
+}
+
+
+// ClosestPoint finds the closest point on the polygon to a given point (x, y).
+func (poly *Polygon) ClosestPoint(x, y float64) (float64, float64) {
+    minDistanceSquared := math.MaxFloat64
+    closestX, closestY := 0.0, 0.0
+
+    for i := 0; i < len(poly.Vertices); i++ {
+        vertexX := poly.Vertices[i].X + poly.Position.X
+        vertexY := poly.Vertices[i].Y + poly.Position.Y
+        dx := x - vertexX
+        dy := y - vertexY
+        distanceSquared := dx*dx + dy*dy
+        if distanceSquared < minDistanceSquared {
+            minDistanceSquared = distanceSquared
+            closestX = vertexX
+            closestY = vertexY
+        }
+    }
+
+    return closestX, closestY
 }
