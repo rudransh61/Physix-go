@@ -32,7 +32,7 @@ func update() error {
 if collision.PolygonCollision(ball, ball2) {
     fmt.Println("collision")
     // Resolve collision
-    collision.ResolveCollision(ball, ball2,0.995)
+    collision.ResolveCollision(ball, ball2,0.995,0)
 }
 
 

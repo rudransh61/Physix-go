@@ -10,6 +10,9 @@ import (
 type Polygon struct {
 	rigidbody.RigidBody
 	Vertices []vector.Vector
+    Rotation float64 // Added rotation property
+    Torque   float64 // Added torque property
+
 }
 
 // NewPolygon creates a new polygon with given properties.
@@ -24,6 +27,8 @@ func NewPolygon(vertices []vector.Vector, mass float64, IsMovable bool) *Polygon
 			IsMovable: IsMovable,
 			Restitution : 1.0,
 		},
+        Rotation: 0, // Initial rotation is set to 0
+        Torque:   0, // Initial torque is set to 0
 		Vertices: vertices,
 	}
 	return polygon
@@ -44,6 +49,7 @@ func CalculateCentroid(vertices []vector.Vector) vector.Vector {
 //Update position of polygon
 func (p *Polygon) UpdatePosition(){
 	p.Position = CalculateCentroid(p.Vertices)
+    p.Rotation = p.Torque / p.Mass // Update rotation based on torque and mass
 }
 
 
@@ -51,16 +57,10 @@ func (p *Polygon) UpdatePosition(){
 // IMPART Impulse on a body
 func (rb *Polygon) ApplyImpulse(impulse vector.Vector) {
     // Calculate the change in velocity using impulse and mass
-    deltaV := vector.Vector{
-        X: impulse.X / rb.Mass,
-        Y: impulse.Y / rb.Mass,
-    }
+    change_velocity := impulse.Scale(1/rb.Mass);
+    rb.Velocity = rb.Velocity.Add(change_velocity)
 
-	// Update everything
-    for i := range rb.Vertices {
-        rb.Vertices[i].X += deltaV.X
-        rb.Vertices[i].Y += deltaV.Y
-    }
+    rb.Rotation += rb.Torque / rb.Mass // Update rotation based on torque and mass
 }
 
 // Project calculates the projection of a polygon onto a given axis.

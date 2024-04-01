@@ -64,12 +64,9 @@ func (rb *RigidBody) ApplyTorque(torque float64) {
 // IMPART Impulse on a body
 func (rb *RigidBody) ApplyImpulse(impulse vector.Vector) {
     // Calculate the change in velocity using impulse and mass
-    deltaV := vector.Vector{
-        X: impulse.X / rb.Mass,
-        Y: impulse.Y / rb.Mass,
-    }
+   
+    change_velocity := impulse.Scale(1/rb.Mass);
+    rb.Velocity = rb.Velocity.Add(change_velocity)
 
-    // Update the velocity of the rigid body
-    rb.Velocity.X += deltaV.X
-    rb.Velocity.Y += deltaV.Y
+    // rb.Rotation += rb.Torque / rb.Mass // Update rotation based on torque and mass
 }

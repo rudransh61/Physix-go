@@ -6,22 +6,27 @@ import (
 	"physix/pkg/polygon"
 	"math"
 	"physix/pkg/vector"
+    // "fmt"
 )
-
 
 // CheckCollision checks if two rectangles (RigidBody instances) are colliding.
 func RectangleCollided(rect1 *rigidbody.RigidBody, rect2 *rigidbody.RigidBody) bool {
-	if(rect1.Shape==rect2.Shape && rect1.Shape=="Rectangle"){
-		left1, top1, right1, bottom1 := rect1.Position.X, rect1.Position.Y, rect1.Position.X+rect1.Width, rect1.Position.Y+rect1.Height
-		left2, top2, right2, bottom2 := rect2.Position.X, rect2.Position.Y, rect2.Position.X+rect2.Width, rect2.Position.Y+rect2.Height
+    // // fmt.Println("Entering RectangleCollided function")
+    // defer fmt.Println("Exiting RectangleCollided function")
+    
+    if rect1.Shape == rect2.Shape && rect1.Shape == "Rectangle" {
+        left1, top1, right1, bottom1 := rect1.Position.X, rect1.Position.Y, rect1.Position.X+rect1.Width, rect1.Position.Y+rect1.Height
+        left2, top2, right2, bottom2 := rect2.Position.X, rect2.Position.Y, rect2.Position.X+rect2.Width, rect2.Position.Y+rect2.Height
 
-		return right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2
-	}
-	return false
-	
+        return right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2
+    }
+    return false
 }
 
 func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
+    // fmt.Println("Entering BounceOnCollision function")
+    // defer fmt.Println("Exiting BounceOnCollision function")
+    
     if rect1.IsMovable && rect2.IsMovable {
         // Calculate the center of mass velocities
         v1 := rect1.Velocity
@@ -41,48 +46,57 @@ func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
     // No bounce if both are static
 }
 
-
-
 // Circle collision detection
 
 func CircleCollided(circle1 *rigidbody.RigidBody, circle2 *rigidbody.RigidBody) bool {
-	if(circle1.Shape==circle2.Shape && circle1.Shape=="Circle"){
-		if(vector.Distance(circle1.Position, circle2.Position)<(circle1.Radius+circle2.Radius)){
-			return true
-		}else{
-			return false
-		}
-	}
-	return false
+    // fmt.Println("Entering CircleCollided function")
+    // defer fmt.Println("Exiting CircleCollided function")
+    
+    if circle1.Shape == circle2.Shape && circle1.Shape == "Circle" {
+        if vector.Distance(circle1.Position, circle2.Position) < (circle1.Radius + circle2.Radius) {
+            return true
+        } else {
+            return false
+        }
+    }
+    return false
 }
-
 
 // Polygon collision detection SAT implementation.
 // Link : https://dyn4j.org/2010/01/sat/
 
 // Project calculates the projection of a polygon onto a given axis.
 func Project(p *polygon.Polygon, axis vector.Vector) (float64, float64) {
-	min := axis.InnerProduct(p.Vertices[0])
-	max := min
-	for i := 1; i < len(p.Vertices); i++ {
-		d := axis.InnerProduct(p.Vertices[i])
-		if d < min {
-			min = d
-		} else if d > max {
-			max = d
-		}
-	}
-	return min, max
+    // fmt.Println("Entering Project function")
+    // defer fmt.Println("Exiting Project function")
+    // 
+    min := axis.InnerProduct(p.Vertices[0])
+    max := min
+    for i := 1; i < len(p.Vertices); i++ {
+        d := axis.InnerProduct(p.Vertices[i])
+        if d < min {
+            min = d
+        } else if d > max {
+            max = d
+        }
+    }
+    return min, max
 }
 
 // Overlap checks if two intervals overlap.
 func Overlap(min1, max1, min2, max2 float64) bool {
-	return !(max1 < min2 || max2 < min1)
+    // fmt.Println("Entering Overlap function")
+    // defer fmt.Println("Exiting Overlap function")
+    
+    return !(max1 < min2 || max2 < min1)
 }
 
 // Collides checks if two polygons are colliding using the SAT algorithm.
 // If they are colliding, resolves the collision by applying appropriate impulses.
 func PolygonCollision(poly1, poly2 *polygon.Polygon) bool {
+    // fmt.Println("Entering PolygonCollision function")
+    // defer fmt.Println("Exiting PolygonCollision function")
+    
     for i := 0; i < len(poly1.Vertices); i++ {
         edge := vector.Vector{
             X: poly1.Vertices[(i+1)%len(poly1.Vertices)].X - poly1.Vertices[i].X,
@@ -116,10 +130,13 @@ func PolygonCollision(poly1, poly2 *polygon.Polygon) bool {
     return true
 }
 
-// ResolveCollision resolves the collision between two polygons by applying appropriate impulses.
-func ResolveCollision(poly1, poly2 *polygon.Polygon,e float64) {
+// ResolveCollision resolves the collision between two polygons by applying appropriate impulses and torques.
+func ResolveCollision(poly1, poly2 *polygon.Polygon, e, torqueCoefficient float64) {
+    // fmt.Println("Entering ResolveCollision function")
+    // defer fmt.Println("Exiting ResolveCollision function")
+    
     // Find the MTV (Minimum Translation Vector) to separate the polygons
-    mtv := findMTV(poly1, poly2)
+    mtv := FindMTV(poly1, poly2)
 
     // Apply the MTV to separate the polygons
     poly1.Move(mtv)
@@ -137,19 +154,44 @@ func ResolveCollision(poly1, poly2 *polygon.Polygon,e float64) {
     }
 
     // Calculate impulse scalar
-    // e := 0.9 // coefficient of restitution (elasticity)
     j := -(1.0 + e) * velocityAlongNormal / (1/poly1.Mass + 1/poly2.Mass)
 
     // Apply impulses to resolve collision
     impulse := mtv.Scale(j)
-	impulseMag := math.Min(impulse.Magnitude() , 1000.0)
-	impulse = mtv.Normalize().Scale(impulseMag)
+    impulseMag := math.Min(impulse.Magnitude(), 50.0)
+    impulse = mtv.Normalize().Scale(impulseMag)
     poly1.ApplyImpulse(impulse)
     poly2.ApplyImpulse(impulse.Scale(-1))
+
+    // Calculate torque impulses
+    torque1 := calculateTorqueImpulse(poly1, mtv)
+    torque2 := calculateTorqueImpulse(poly2, mtv)
+
+    // Apply torque impulses to resolve collision
+    poly1.ApplyTorque(torque1 * torqueCoefficient)
+    poly2.ApplyTorque(-torque2 * torqueCoefficient)
 }
 
-// findMTV finds the Minimum Translation Vector (MTV) to separate two polygons.
-func findMTV(poly1, poly2 *polygon.Polygon) vector.Vector {
+// calculateTorqueImpulse calculates the torque impulse for a polygon given the MTV.
+func calculateTorqueImpulse(poly *polygon.Polygon, mtv vector.Vector) float64 {
+    // fmt.Println("Entering calculateTorqueImpulse function")
+    // defer fmt.Println("Exiting calculateTorqueImpulse function")
+    
+    // Calculate the perpendicular distance from centroid to the collision point
+    // This is used to calculate torque
+    centroidToCollision := PerpendicularDistance(poly.Position, poly.Position, mtv) // Pass polygon centroid position as the first argument
+
+    // Calculate the torque impulse
+    torque := centroidToCollision * mtv.Magnitude() // Adjust this calculation based on your method
+
+    return torque
+}
+
+// FindMTV finds the Minimum Translation Vector (MTV) to separate two polygons.
+func FindMTV(poly1, poly2 *polygon.Polygon) vector.Vector {
+    // fmt.Println("Entering FindMTV function")
+    // defer fmt.Println("Exiting FindMTV function")
+    
     minOverlap := math.MaxFloat64
     mtv := vector.Vector{}
 
@@ -202,6 +244,9 @@ func findMTV(poly1, poly2 *polygon.Polygon) vector.Vector {
 
 // CirclePolygonCollision checks collision between a circle and a polygon (rectangle in this case).
 func CirclePolygonCollision(circle *rigidbody.RigidBody, poly *polygon.Polygon) bool {
+    // fmt.Println("Entering CirclePolygonCollision function")
+    // defer fmt.Println("Exiting CirclePolygonCollision function")
+    
     // Translate the circle's position into the coordinate system of the polygon
     circleX := circle.Position.X - poly.Position.X
     circleY := circle.Position.Y - poly.Position.Y
@@ -215,4 +260,24 @@ func CirclePolygonCollision(circle *rigidbody.RigidBody, poly *polygon.Polygon) 
 
     // If the distance is less than the circle's radius, they are colliding
     return (distanceX*distanceX + distanceY*distanceY) <= (circle.Radius * circle.Radius)
+}
+
+// PerpendicularDistance calculates the perpendicular distance from a point to a line defined by two other points.
+func PerpendicularDistance(point, linePoint1, linePoint2 vector.Vector) float64 {
+    // fmt.Println("Entering PerpendicularDistance function")
+    // defer fmt.Println("Exiting PerpendicularDistance function")
+    
+    // Vector from linePoint1 to linePoint2
+    lineVector := linePoint2.Sub(linePoint1)
+
+    // Vector from linePoint1 to the point
+    pointVector := point.Sub(linePoint1)
+
+    // Projection of pointVector onto lineVector
+    projection := pointVector.InnerProduct(lineVector) / lineVector.Magnitude()
+
+    // Calculate the perpendicular distance
+    perpendicularDistance := pointVector.Magnitude() - projection
+
+    return perpendicularDistance
 }
