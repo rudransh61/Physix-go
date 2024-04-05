@@ -8,6 +8,8 @@
 
 <div algin="center">
   <img src="/example.gif" width="200">
+  <img src="/example1.gif" width="200">
+  <img src="/example2.gif" width="200">
 </div>
 
 ## Table of Contents
