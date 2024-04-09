@@ -1,4 +1,4 @@
-module github.com/rudransh61/Physix.go
+module physix
 
 go 1.21.1
 
