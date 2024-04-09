@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix.go/internal/physics"
+	"github.com/rudransh61/Physix.go/pkg/rigidbody"
+	"github.com/rudransh61/Physix.go/pkg/vector"
 	// "physix/internal/collision"
 )
 
