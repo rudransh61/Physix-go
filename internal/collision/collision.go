@@ -1,4 +1,4 @@
-// internal/collision/collision.go
+// dynamics/collision/collision.go
 package collision
 
 import (

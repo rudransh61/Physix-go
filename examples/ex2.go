@@ -4,7 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
 )

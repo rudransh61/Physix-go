@@ -7,7 +7,7 @@ import (
 
 	"github.com/rudransh61/Physix-go/pkg/matrices"
 
-	// "github.com/rudransh61/Physix-go/internal/collision"
+	// "github.com/rudransh61/Physix-go/dynamics/collision"
 )
 
 func main() {

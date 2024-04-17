@@ -154,7 +154,7 @@ To create an instance of RigidBody you need to provide all the required fields .
 First Import these files,
 ```golang
 import (
-  "github.com/rudransh61/Physix-go/internal/physics"
+  "github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 )
 ```

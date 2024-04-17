@@ -6,8 +6,8 @@ import (
 	"image/color"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/internal/physics"
-	"github.com/rudransh61/Physix-go/internal/collision"
+	"github.com/rudransh61/Physix-go/dynamics/physics"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
 	"fmt"
 	"math"
 )
