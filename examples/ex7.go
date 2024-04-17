@@ -19,8 +19,8 @@ var (
 
 func update() error {
 	// Update the github.com/rudransh61/Physix-go simulation
-	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(platform, ball.Force, dt)
+	physix.ApplyForce(ball, ball.Force, dt)
+	physix.ApplyForce(platform, ball.Force, dt)
 
 	if(collision.RectangleCollided(ball,platform)){
 		fmt.Println("Bounced!")
