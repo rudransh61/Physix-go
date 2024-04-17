@@ -1,9 +1,9 @@
 package main
 
 import (
-	"physix/internal/physics"
-	"physix/pkg/polygon"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/polygon"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 	"fmt"
 	"time"
 )
@@ -28,7 +28,7 @@ func main() {
 	dt := 0.1 // Time step for simulation
 
 	for i := 0; i < 100; i++ {
-        physix.ApplyForcePolygon(Polygon, vector.Vector{X: 10, Y: 0}, dt)
+        github.com/rudransh61/Physix-go.ApplyForcePolygon(Polygon, vector.Vector{X: 10, Y: 0}, dt)
 
         fmt.Printf("Polygon: Position(%f, %f)\n", Polygon.Position.X, Polygon.Position.Y)
         fmt.Println("--------")

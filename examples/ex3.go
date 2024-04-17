@@ -4,9 +4,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	"physix/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 func update() error {
 	// Apply a force to simulate gravity
 	gravity := vector.Vector{X: 0, Y: 2}
-	physix.ApplyForce(ball, gravity, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball, gravity, dt)
 
 	// Bounce off the walls
 	if ball.Position.X < 0 || ball.Position.X > 400 {
@@ -31,7 +31,7 @@ func update() error {
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the ball using the physix engine's position
+	// Draw the ball using the github.com/rudransh61/Physix-go engine's position
 	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 20, 20, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 }
 
@@ -40,7 +40,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Bouncing Ball")
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 100, Y: 200},
 		Velocity: vector.Vector{X: 50, Y: -50},

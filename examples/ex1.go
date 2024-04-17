@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	// "physix/internal/collision"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	// "github.com/rudransh61/Physix-go/internal/collision"
 )
 
 func main() {
@@ -29,8 +29,8 @@ func main() {
 	dt := 0.1 // Time step for simulation
 
 	for i := 0; i < 100; i++ {
-        physix.ApplyForce(ball1, vector.Vector{X: 10, Y: 0}, dt)
-        physix.ApplyForce(ball2, vector.Vector{X: 0, Y: 10}, dt)
+        github.com/rudransh61/Physix-go.ApplyForce(ball1, vector.Vector{X: 10, Y: 0}, dt)
+        github.com/rudransh61/Physix-go.ApplyForce(ball2, vector.Vector{X: 0, Y: 10}, dt)
 
         fmt.Printf("Ball1: Position(%f, %f)\n", ball1.Position.X, ball1.Position.Y)
         fmt.Printf("Ball2: Position(%f, %f)\n", ball2.Position.X, ball2.Position.Y)

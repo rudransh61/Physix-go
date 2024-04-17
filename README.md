@@ -71,7 +71,7 @@ package main
 
 import (
   //...other imports
-  "physix/pkg/vector"
+  "github.com/rudransh61/Physix-go/pkg/vector"
 )
 ```
 
@@ -154,8 +154,8 @@ To create an instance of RigidBody you need to provide all the required fields .
 First Import these files,
 ```golang
 import (
-  "physix/internal/physics"
-	"physix/pkg/rigidbody"
+  "github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 )
 ```
 
@@ -177,7 +177,7 @@ To update position of a RigidBody, Use <b>ApplyForce</b> in a loop ,
 Example :- 
 ```golang
 for i := 0; i < 100; i++ {
-        physix.ApplyForce(ball1, vector.Vector{X: 10, Y: 0}, dt) // Make the vector (0,0) to apply no force
+        github.com/rudransh61/Physix-go.ApplyForce(ball1, vector.Vector{X: 10, Y: 0}, dt) // Make the vector (0,0) to apply no force
         // .. other code
     }
 ```

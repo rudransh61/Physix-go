@@ -4,10 +4,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	// "fmt"
 )
 
@@ -34,8 +34,8 @@ func update() error {
 	}
 
 	// Update the physics simulation
-	physix.ApplyForce(ball, ball.Force, dt)
-	physix.ApplyForce(platform, ball.Force, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(platform, ball.Force, dt)
 	ball.Force.Y = 5
 	// Check for collision between ball and platform
 	if collision.RectangleCollided(ball, platform) {

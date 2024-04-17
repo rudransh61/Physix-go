@@ -6,10 +6,10 @@ import (
 	"image/color"
 	"math/rand"
 	"math"
-	"physix/internal/collision"
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/collision"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 )
 
 var (
@@ -29,7 +29,7 @@ func update() error {
 	// Apply gravity and handle wall collisions for all balls
 	for _, ball := range balls {
 		gravity := vector.Vector{X: 0, Y: 0}
-		physix.ApplyForce(ball, gravity, dt)
+		github.com/rudransh61/Physix-go.ApplyForce(ball, gravity, dt)
 		checkWallCollision(ball)
 	}
 

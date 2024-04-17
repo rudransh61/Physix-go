@@ -4,9 +4,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 	// "log"
 )
 
@@ -17,16 +17,16 @@ var (
 
 func update() error {
 	ball.ApplyTorque(1)
-	// Update the physix simulation
-	physix.ApplyForce(ball, ball.Force, dt)
-	// physix.UpdateRotation(ball,dt)
+	// Update the github.com/rudransh61/Physix-go simulation
+	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
+	// github.com/rudransh61/Physix-go.UpdateRotation(ball,dt)
 
 
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physix engine's position
+	// Draw the rectangle using the github.com/rudransh61/Physix-go engine's position
 	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 50, 50, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 }
 
@@ -35,7 +35,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Projectile Motion")
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 100, Y: 400},
 		Velocity: vector.Vector{X: 30, Y: -20},

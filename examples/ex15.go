@@ -4,10 +4,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	"physix/internal/physics"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	"math"
 	"math/rand"
 	// "fmt"
@@ -51,7 +51,7 @@ func checkwall(ball *rigidbody.RigidBody) {
 func update() error {
 	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
-		physix.ApplyForce(ball, gravity, dt)
+		github.com/rudransh61/Physix-go.ApplyForce(ball, gravity, dt)
 		checkwall(ball)
 	}
 

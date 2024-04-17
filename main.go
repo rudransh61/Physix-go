@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 )
 
 func main() {
@@ -28,8 +28,8 @@ func main() {
 
 	for i := 0; i < 100; i++ {
 		// Update the position of the balls in the simulation
-		physix.ApplyForce(ball1, vector.Vector{X: 0, Y: 0}, dt)
-		physix.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
+		github.com/rudransh61/Physix-go.ApplyForce(ball1, vector.Vector{X: 0, Y: 0}, dt)
+		github.com/rudransh61/Physix-go.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
 
 		// Print the current positions of the balls
 		fmt.Printf("Ball1: Position(%f, %f)\n", ball1.Position.X, ball1.Position.Y)

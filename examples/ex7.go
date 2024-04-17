@@ -4,10 +4,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	"fmt"
 )
 
@@ -18,9 +18,9 @@ var (
 )
 
 func update() error {
-	// Update the physix simulation
-	physix.ApplyForce(ball, ball.Force, dt)
-	physix.ApplyForce(platform, ball.Force, dt)
+	// Update the github.com/rudransh61/Physix-go simulation
+	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(platform, ball.Force, dt)
 
 	if(collision.RectangleCollided(ball,platform)){
 		fmt.Println("Bounced!")
@@ -31,7 +31,7 @@ func update() error {
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physix engine's position
+	// Draw the rectangle using the github.com/rudransh61/Physix-go engine's position
 	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, ball.Width, ball.Height, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 	ebitenutil.DrawRect(screen, platform.Position.X, platform.Position.Y, platform.Width, platform.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
 }
@@ -41,7 +41,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Bouncing Ball - feat Gravity")
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 400, Y: 100},
 		Velocity: vector.Vector{X: 0, Y: 2},

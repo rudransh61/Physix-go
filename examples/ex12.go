@@ -4,10 +4,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/pkg/polygon"
-	"physix/pkg/vector"
-	"physix/internal/physics"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/pkg/polygon"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	"fmt"
 )
 
@@ -21,8 +21,8 @@ var (
 func update() error {
 	// Apply a force to simulate gravity
 	gravity := vector.Vector{X: 0, Y: 10}
-	physix.ApplyForcePolygon(ball, gravity, dt)
-	physix.ApplyForcePolygon(ball2, gravity, dt)
+	github.com/rudransh61/Physix-go.ApplyForcePolygon(ball, gravity, dt)
+	github.com/rudransh61/Physix-go.ApplyForcePolygon(ball2, gravity, dt)
 
 	if ball.Position.Y < 0 || ball.Position.Y > 400 {
 		ball.Velocity.Y = -10
@@ -45,7 +45,7 @@ if collision.PolygonCollision(ball, ball2) {
 
 
 func draw(screen *ebiten.Image) {
-	// Draw the ball using the physix engine's position
+	// Draw the ball using the github.com/rudransh61/Physix-go engine's position
 	// calculateCentroid calculates the centroid of a polygon given its vertices.
 	for _, v := range ball.Vertices {
 		ebitenutil.DrawRect(screen, v.X, v.Y, 10, 10, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
@@ -75,7 +75,7 @@ func main() {
 
 	vertices := []vector.Vector{{X: 250, Y: 50}, {X: 200, Y: 100}, {X: 200, Y: 50}, {X: 350, Y: 200}}
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = polygon.NewPolygon(vertices, 50, true)
 	ball2 = polygon.NewPolygon( []vector.Vector{{X: 100, Y: 50}, {X: 50, Y: 100}, {X: 50, Y: 50}, {X: 200, Y: 200}}, 50, true)
 	ball2.Velocity.X = 100

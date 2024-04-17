@@ -1,8 +1,8 @@
 package polygon
 
 import (
-	"physix/pkg/vector"
-	"physix/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"math"
 )
 

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"physix/pkg/polygon"
-	"physix/pkg/vector"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/pkg/polygon"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	"fmt"
-	// "physix/internal/physics"
+	// "github.com/rudransh61/Physix-go/internal/physics"
 )
 
 func main() {

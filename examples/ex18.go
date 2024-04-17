@@ -5,11 +5,11 @@ import (
     "github.com/hajimehoshi/ebiten/v2/ebitenutil"
     "image/color"
     "math"
-    "physix/internal/collision"
-    "physix/internal/physics"
-    "physix/pkg/polygon"
-    "physix/pkg/rigidbody"
-    "physix/pkg/vector"
+    "github.com/rudransh61/Physix-go/internal/collision"
+    "github.com/rudransh61/Physix-go/internal/physics"
+    "github.com/rudransh61/Physix-go/pkg/polygon"
+    "github.com/rudransh61/Physix-go/pkg/rigidbody"
+    "github.com/rudransh61/Physix-go/pkg/vector"
     "fmt"
 )
 
@@ -23,7 +23,7 @@ var (
 func update() error {
     // Apply a force to simulate gravity
     gravity := vector.Vector{X: 0, Y: 1000}
-    physix.ApplyForcePolygon(ball, gravity, dt)
+    github.com/rudransh61/Physix-go.ApplyForcePolygon(ball, gravity, dt)
 
     // Rotate the bat
     batAngle += 0.01 // Adjust the rotation speed as needed
@@ -42,12 +42,12 @@ func update() error {
 }
 
 func draw(screen *ebiten.Image) {
-    // Draw the ball using the physix engine's position
+    // Draw the ball using the github.com/rudransh61/Physix-go engine's position
     for _, v := range ball.Vertices {
         ebitenutil.DrawRect(screen, v.X, v.Y, 10, 10, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
     }
 
-    // Draw the bat using the physix engine's position and rotation
+    // Draw the bat using the github.com/rudransh61/Physix-go engine's position and rotation
     for _, v := range bat.Vertices {
         // Rotate each vertex of the bat
         rotatedVertex := rotateVertex(v, batAngle, bat.Position)
@@ -83,7 +83,7 @@ func main() {
     // Define vertices for the small square ball
     ballVertices := []vector.Vector{{X: 200, Y: 200}, {X: 210, Y: 200}, {X: 210, Y: 210}, {X: 200, Y: 210}} // Make the ball square and small
 
-    // Initialize a rigid body with your physix engine
+    // Initialize a rigid body with your github.com/rudransh61/Physix-go engine
     ball = polygon.NewPolygon(ballVertices, 50, true)
 
     // Initialize the bat

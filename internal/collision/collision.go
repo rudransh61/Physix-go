@@ -2,10 +2,10 @@
 package collision
 
 import (
-	"physix/pkg/rigidbody"
-	"physix/pkg/polygon"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/polygon"
 	"math"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/pkg/vector"
     // "fmt"
 )
 

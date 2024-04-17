@@ -4,10 +4,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
-	"physix/internal/physics"
-	"physix/internal/collision"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/internal/collision"
 	"fmt"
 	"math"
 )
@@ -63,9 +63,9 @@ func CheckBall(rect1, rect2 *rigidbody.RigidBody) bool {
 }
 
 func update() error {
-	physix.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
-	physix.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
-	physix.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
 
 	//checkwall
 	checkwall(ball)
@@ -104,7 +104,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Bouncing Ball")
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 100, Y: 200},
 		Velocity: vector.Vector{X: 50, Y: -50},

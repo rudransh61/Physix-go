@@ -1,10 +1,10 @@
-package physix
+package github.com/rudransh61/Physix-go
 
 import (
 	// "math"
-	"physix/pkg/polygon"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/pkg/polygon"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 	"math"
 )
 

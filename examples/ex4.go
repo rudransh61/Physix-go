@@ -5,9 +5,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"physix/internal/physics"
-	"physix/pkg/rigidbody"
-	"physix/pkg/vector"
+	"github.com/rudransh61/Physix-go/internal/physics"
+	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 )
 
 var (
@@ -22,10 +22,10 @@ func update() error {
 	centripetalForce := calculateCentripetalForce(ball.Position, ball.Mass)
 
 	// Apply the centripetal force to the rigid body
-	physix.ApplyForce(ball, centripetalForce,dt)
+	github.com/rudransh61/Physix-go.ApplyForce(ball, centripetalForce,dt)
 
-	// Update the physix simulation
-	// physix.UpdateRigidBody(ball, dt)
+	// Update the github.com/rudransh61/Physix-go simulation
+	// github.com/rudransh61/Physix-go.UpdateRigidBody(ball, dt)
 
 	// Add the current position to the list of points
 	points = append(points, ball.Position)
@@ -48,7 +48,7 @@ func calculateCentripetalForce(position vector.Vector, mass float64) vector.Vect
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the ball using the physix engine's position
+	// Draw the ball using the github.com/rudransh61/Physix-go engine's position
 	ebitenutil.DrawRect(screen, center.X, center.Y, 20, 20, color.RGBA{R: 0, G: 0xff, B: 0})
 	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, 20, 20, color.RGBA{R: 0xff, G: 0, B: 0})
 
@@ -63,7 +63,7 @@ func main() {
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Circular Motion")
 
-	// Initialize a rigid body with your physix engine
+	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
 		Position: vector.Vector{X: 500, Y: 400},
 		Velocity: vector.Vector{X: 20, Y: 0},
