@@ -1,4 +1,4 @@
-package github.com/rudransh61/Physix-go
+package physix
 
 import (
 	// "math"
