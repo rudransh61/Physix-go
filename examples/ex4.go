@@ -22,7 +22,7 @@ func update() error {
 	centripetalForce := calculateCentripetalForce(ball.Position, ball.Mass)
 
 	// Apply the centripetal force to the rigid body
-	github.com/rudransh61/Physix-go.ApplyForce(ball, centripetalForce,dt)
+	physix.ApplyForce(ball, centripetalForce,dt)
 
 	// Update the github.com/rudransh61/Physix-go simulation
 	// github.com/rudransh61/Physix-go.UpdateRigidBody(ball, dt)

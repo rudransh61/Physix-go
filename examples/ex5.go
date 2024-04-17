@@ -63,9 +63,9 @@ func CheckBall(rect1, rect2 *rigidbody.RigidBody) bool {
 }
 
 func update() error {
-	github.com/rudransh61/Physix-go.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
+	physix.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
+	physix.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
+	physix▬.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
 
 	//checkwall
 	checkwall(ball)
