@@ -16,7 +16,7 @@ var (
 
 func update() error {
 	// Update the github.com/rudransh61/Physix-go simulation
-	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
+	physix.ApplyForce(ball, ball.Force, dt)
 
 	return nil
 }
