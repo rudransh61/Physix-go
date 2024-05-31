@@ -12,19 +12,6 @@
   <img src="/example2.gif" width="200">
 </div>
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
 ## Introduction
 
 Physix.go is simple, easy to use , fast , physics engine written in GoLang
@@ -247,6 +234,81 @@ And same <a href='#'>BounceOnCollision</a> function for Bouncing ...
 
 Check examples in `./example` folder
 
+## Polygon 
+
+To create a polygon , we made a new entity <b>Polygon</b> which inherits all Properties of <b>RigidBody</b> with some additional features.
+
+<pre>
+ - <b>Position</b>     : <i>Vector</i>           # Required while initializing
+ - <b>Velocity</b>     : <i>Vector</i>
+ - <b>Force</b>        : <i>Vector</i>
+ - <b>Mass</b>         : <i>float64</i>          # Required while initializing for Collision and Forces
+ - <b>IsMovable</b>    : <i>bool</i>             # Required while initializing for Collision and Forces
+ - <b>Vertices</b>     : <i>[] Vector</i>        # Required while initializing only for Shape :- "Polygon"
+</pre>
+
+To initialize a polygon , use **NewPolygon** function 
+### Example 
+```go
+import (
+	...
+	"github.com/rudransh61/Physix-go/pkg/polygon"
+	...
+)
+...
+vertices := []vector.Vector{
+	{X: 250, Y: 50}, 
+	{X: 200, Y: 100}, 
+	{X: 200, Y: 50}, 
+	{X: 350, Y: 200}
+}
+
+ball = polygon.NewPolygon(vertices, 50, true)
+```
+
+## Some Dynamics
+
+### Physics
+
+To update our <button title="object">'entity'</button> , 
+We have 2 functions which are <b>ApplyForce</b> and <b>ApplyForcePolygon</b> , as the name suggests one is for Rigidbody and one for polygons.
+
+This function will move one frame forward or 'dt' time forward (which is time between 2 frames).
+
+<mark>NOTE: Define dt(0.1 mostly) at top globally for good code</mark>
+
+```go
+polygonA := polygon.NewPolygon(vertices, 50, true) # Example
+
+# Define dt
+dt := 0.1
+
+physix.ApplyForcePolygon(
+	polygonA, 
+	vector.Vector{X: 10, Y: 0}, 
+	dt,
+) 
+# To applyForce on polygon and update its position and everything
+
+```
+
+Similarly for RigidBody : 
+```go
+rigid := &rigidbody.Rigidbody{...}
+
+physix.ApplyForce(rigid, vector.Vector{X:10,Y:0}, dt)
+
+```
+
+To get both the utilities in the code import this file:
+```go
+import(
+	...
+	"github.com/rudransh61/Physix-go/dynamics/physics"
+ 	...
+)
+```
+
 ## Contributing
 
 New contributors are welcome!!
@@ -259,4 +321,3 @@ If you have any doubt related to its working you can ask to us by opening an iss
 ## Acknowledgments
 
 Inspired from [Coding Train - Daniel Shiffman](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
-```
