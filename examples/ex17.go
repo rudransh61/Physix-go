@@ -3,20 +3,20 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
-	"math/rand"
-	"math"
 	"github.com/rudransh61/Physix-go/dynamics/collision"
 	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
+	"image/color"
+	"math"
+	"math/rand"
 )
 
 var (
 	balls      []*rigidbody.RigidBody
 	dt         = 0.1
 	redBallIdx = 0 // Index of the red ball
-	check = 1
+	check      = 1
 )
 
 const (
@@ -29,7 +29,7 @@ func update() error {
 	// Apply gravity and handle wall collisions for all balls
 	for _, ball := range balls {
 		gravity := vector.Vector{X: 0, Y: 0}
-		github.com/rudransh61/Physix-go.ApplyForce(ball, gravity, dt)
+		physix.ApplyForce(ball, gravity, dt)
 		checkWallCollision(ball)
 	}
 
@@ -37,7 +37,7 @@ func update() error {
 	for i := 0; i < len(balls); i++ {
 		for j := i + 1; j < len(balls); j++ {
 			if collision.RectangleCollided(balls[i], balls[j]) {
-				if(check<2){
+				if check < 2 {
 					resolveCollision(balls[i], balls[j])
 					// check = 4
 				}
@@ -93,20 +93,20 @@ func checkWallCollision(ball *rigidbody.RigidBody) {
 	// Bounce off the walls
 	if ball.Position.X < 100 || ball.Position.X > 600 {
 		// ball.Velocity.X = -1*math.Abs(ball.Velocity.X)
-		if(ball.Position.X < 100){
+		if ball.Position.X < 100 {
 			ball.Velocity.X = math.Abs(ball.Velocity.X)
 		}
-		if(ball.Position.X > 600){
-			ball.Velocity.X = -1*math.Abs(ball.Velocity.X)
+		if ball.Position.X > 600 {
+			ball.Velocity.X = -1 * math.Abs(ball.Velocity.X)
 		}
 	}
 	if ball.Position.Y < 100 || ball.Position.Y > 600 {
 		// ball.Velocity.Y = -1*math.Abs(ball.Velocity.X)
-		if(ball.Position.Y < 100){
+		if ball.Position.Y < 100 {
 			ball.Velocity.Y = math.Abs(ball.Velocity.Y)
 		}
-		if(ball.Position.Y > 600){
-			ball.Velocity.Y = -1*math.Abs(ball.Velocity.Y)
+		if ball.Position.Y > 600 {
+			ball.Velocity.Y = -1 * math.Abs(ball.Velocity.Y)
 		}
 	}
 }
@@ -125,9 +125,9 @@ func draw(screen *ebiten.Image) {
 	}
 
 	// Draw boundaries
-	ebitenutil.DrawRect(screen, 100.0, 100.0, 550, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // Up
-	ebitenutil.DrawRect(screen, 100.0, 100.0, 10, 550, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // Left
-	ebitenutil.DrawRect(screen, 650.0, 100.0, 10, 550, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // Right
+	ebitenutil.DrawRect(screen, 100.0, 100.0, 550, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // Up
+	ebitenutil.DrawRect(screen, 100.0, 100.0, 10, 550, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // Left
+	ebitenutil.DrawRect(screen, 650.0, 100.0, 10, 550, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // Right
 	ebitenutil.DrawRect(screen, 100.0, 650.0, 550, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // Down
 }
 

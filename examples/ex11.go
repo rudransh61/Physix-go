@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
 	"github.com/rudransh61/Physix-go/pkg/polygon"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/dynamics/collision"
-	"fmt"
 	// "github.com/rudransh61/Physix-go/dynamics/physics"
 )
 
@@ -22,19 +22,19 @@ func main() {
 		Vertices: []vector.Vector{{X: 250, Y: 500}, {X: 250, Y: 300}, {X: 250, Y: 250}, {X: 200, Y: 250}},
 	}
 	// Check if the polygons are colliding
-	if collision.PolygonCollision(polygon1, polygon2) {
+	if collision.PolygonCollision(&polygon1, &polygon2) {
 		fmt.Println("Polygons 1 2 are colliding")
 	} else {
 		fmt.Println("Polygons 1 2 are not colliding")
 	}
 	// Check if the polygons are colliding
-	if collision.PolygonCollision(polygon1, polygon3) {
+	if collision.PolygonCollision(&polygon1, &polygon3) {
 		fmt.Println("Polygons 1 3 are colliding")
 	} else {
 		fmt.Println("Polygons 1 3 are not colliding")
 	}
 	// Check if the polygons are colliding
-	if collision.PolygonCollision(polygon2, polygon3) {
+	if collision.PolygonCollision(&polygon2, &polygon3) {
 		fmt.Println("Polygons 2 3 are colliding")
 	} else {
 		fmt.Println("Polygons 2 3 are not colliding")

@@ -3,11 +3,11 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
+	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/dynamics/physics"
-	"github.com/rudransh61/Physix-go/dynamics/collision"
+	"image/color"
 	"math"
 	"math/rand"
 	// "fmt"
@@ -19,31 +19,31 @@ var (
 )
 
 const (
-	Mass     = 2
-	Shape    = "Circle"
-	Radius   = 10
+	Mass   = 2
+	Shape  = "Circle"
+	Radius = 10
 )
 
 func checkwall(ball *rigidbody.RigidBody) {
 	// Bounce off the walls
 	if ball.Position.X < 100+ball.Radius || ball.Position.X > 600-ball.Radius {
 		if ball.Position.X < 100+ball.Radius {
-			ball.Velocity.X = math.Abs(ball.Velocity.X*0.7)
-			ball.Position.X = 100+ball.Radius
+			ball.Velocity.X = math.Abs(ball.Velocity.X * 0.7)
+			ball.Position.X = 100 + ball.Radius
 		}
 		if ball.Position.X > 600-ball.Radius {
 			ball.Velocity.X = -0.7 * math.Abs(ball.Velocity.X)
-			ball.Position.X = 600-ball.Radius
+			ball.Position.X = 600 - ball.Radius
 		}
 	}
 	if ball.Position.Y < 100+ball.Radius || ball.Position.Y > 600-ball.Radius {
 		if ball.Position.Y < 100+ball.Radius {
-			ball.Velocity.Y = math.Abs(ball.Velocity.Y*0.7)
-			ball.Position.Y = 100+ball.Radius
+			ball.Velocity.Y = math.Abs(ball.Velocity.Y * 0.7)
+			ball.Position.Y = 100 + ball.Radius
 		}
 		if ball.Position.Y > 600-ball.Radius {
 			ball.Velocity.Y = -0.7 * math.Abs(ball.Velocity.Y)
-			ball.Position.Y = 600-ball.Radius
+			ball.Position.Y = 600 - ball.Radius
 		}
 	}
 }
@@ -51,7 +51,7 @@ func checkwall(ball *rigidbody.RigidBody) {
 func update() error {
 	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
-		github.com/rudransh61/Physix-go.ApplyForce(ball, gravity, dt)
+		physix.ApplyForce(ball, gravity, dt)
 		checkwall(ball)
 	}
 
@@ -83,14 +83,13 @@ func resolveCollision(ball1, ball2 *rigidbody.RigidBody) {
 		// Calculate the amount by which to move the balls apart
 		moveAmount := minimumDistance - distanceMagnitude
 		// Calculate the movement vectors for each ball
-		moveVector1 := moveDirection.Scale(moveAmount/2)
-		moveVector2 := moveDirection.Scale(-moveAmount/2)
+		moveVector1 := moveDirection.Scale(moveAmount / 2)
+		moveVector2 := moveDirection.Scale(-moveAmount / 2)
 		// Move the balls apart
 		ball1.Position = ball1.Position.Add(moveVector1)
 		ball2.Position = ball2.Position.Add(moveVector2)
 	}
 }
-
 
 func draw(screen *ebiten.Image) {
 	for _, ball := range balls {
@@ -98,10 +97,10 @@ func draw(screen *ebiten.Image) {
 	}
 
 	//Boundary
-	ebitenutil.DrawRect(screen, 600.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // right
-	ebitenutil.DrawRect(screen, 90.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})   // left
-	ebitenutil.DrawRect(screen, 90.0, 100.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})   // up
-	ebitenutil.DrawRect(screen, 90.0, 600.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // down
+	ebitenutil.DrawRect(screen, 600.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // right
+	ebitenutil.DrawRect(screen, 90.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // left
+	ebitenutil.DrawRect(screen, 90.0, 100.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // up
+	ebitenutil.DrawRect(screen, 90.0, 600.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // down
 }
 
 func main() {
@@ -124,8 +123,8 @@ func initializeBalls(n int) {
 	balls = make([]*rigidbody.RigidBody, n)
 	for i := 0; i < n; i++ {
 		balls[i] = &rigidbody.RigidBody{
-			Position:  vector.Vector{X: float64(rand.Intn(200)+200), Y: float64(rand.Intn(200)+200)},
-			Velocity:  vector.Vector{X: float64(rand.Intn(20)) , Y: float64(rand.Intn(20))},
+			Position:  vector.Vector{X: float64(rand.Intn(200) + 200), Y: float64(rand.Intn(200) + 200)},
+			Velocity:  vector.Vector{X: float64(rand.Intn(20)), Y: float64(rand.Intn(20))},
 			Mass:      Mass,
 			Shape:     Shape,
 			Radius:    Radius,
