@@ -3,20 +3,20 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
+	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/dynamics/physics"
-	"github.com/rudransh61/Physix-go/dynamics/collision"
+	"image/color"
 	// "math"
 	"fmt"
 )
 
 var (
-	ball *rigidbody.RigidBody
+	ball  *rigidbody.RigidBody
 	ball2 *rigidbody.RigidBody
 	ball3 *rigidbody.RigidBody
-	dt   = 0.1
+	dt    = 0.1
 )
 
 func checkwall(ball *rigidbody.RigidBody) {
@@ -37,42 +37,42 @@ func checkwall(ball *rigidbody.RigidBody) {
 }
 
 func update() error {
-	github.com/rudransh61/Physix-go.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
+	physix.ApplyForce(ball, vector.Vector{X: 0, Y: 0}, dt)
+	physix.ApplyForce(ball2, vector.Vector{X: 0, Y: 0}, dt)
+	physix.ApplyForce(ball3, vector.Vector{X: 0, Y: 0}, dt)
 
 	// //checkwall
 	checkwall(ball)
 	checkwall(ball2)
 	checkwall(ball3)
 
-	if(collision.CircleCollided(ball,ball2)){
+	if collision.CircleCollided(ball, ball2) {
 		fmt.Println("Collided!")
-		collision.BounceOnCollision(ball,ball2,1.0)
+		collision.BounceOnCollision(ball, ball2, 1.0)
 	}
-	if(collision.CircleCollided(ball3,ball2)){
+	if collision.CircleCollided(ball3, ball2) {
 		fmt.Println("Collided!")
-		collision.BounceOnCollision(ball2,ball3,1.0)
+		collision.BounceOnCollision(ball2, ball3, 1.0)
 	}
-	if(collision.CircleCollided(ball3,ball)){
+	if collision.CircleCollided(ball3, ball) {
 		fmt.Println("Collided!")
-		collision.BounceOnCollision(ball,ball3,1.0)
+		collision.BounceOnCollision(ball, ball3, 1.0)
 	}
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
 	ebitenutil.DrawCircle(screen, ball.Position.X, ball.Position.Y, ball.Radius, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
-	ebitenutil.DrawCircle(screen, ball2.Position.X, ball2.Position.Y, ball2.Radius,  color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	ebitenutil.DrawCircle(screen, ball2.Position.X, ball2.Position.Y, ball2.Radius, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
 	ebitenutil.DrawCircle(screen, ball3.Position.X, ball3.Position.Y, ball3.Radius, color.RGBA{R: 0, G: 0, B: 0xff, A: 0xff})
 	// ebitenutil.DrawRect(screen, ball2.Position.X, ball2.Position.Y, 70, 70, color.RGBA{R: 0, G: 0, B: 0xff, A: 0xff})
 	// ebitenutil.DrawRect(screen, ball3.Position.X, ball3.Position.Y, 70, 70, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
-	
+
 	//Boundary
-	ebitenutil.DrawRect(screen, 690.0, 100.0 ,10,500, color.RGBA{R:0,G:0xff,B:0,A:0}) // right
-	ebitenutil.DrawRect(screen, 90.0, 100.0 ,10,500, color.RGBA{R:0,G:0xff,B:0,A:0}) // left
-	ebitenutil.DrawRect(screen, 90.0, 100.0 ,600,10, color.RGBA{R:0,G:0xff,B:0,A:0}) // up
-	ebitenutil.DrawRect(screen, 90.0, 600.0 ,600,10, color.RGBA{R:0,G:0xff,B:0,A:0}) // down 
+	ebitenutil.DrawRect(screen, 690.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // right
+	ebitenutil.DrawRect(screen, 90.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // left
+	ebitenutil.DrawRect(screen, 90.0, 100.0, 600, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // up
+	ebitenutil.DrawRect(screen, 90.0, 600.0, 600, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // down
 }
 
 func main() {
@@ -82,28 +82,28 @@ func main() {
 
 	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 150, Y: 200},
-		Velocity: vector.Vector{X: 0, Y: 0},
-		Mass:   rigidbody.Infinite_mass,
-		Shape : "Circle",
-		Radius : 30,
-		IsMovable : false,
+		Position:  vector.Vector{X: 150, Y: 200},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      rigidbody.Infinite_mass,
+		Shape:     "Circle",
+		Radius:    30,
+		IsMovable: false,
 	}
 	ball2 = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 400, Y: 300},
-		Velocity: vector.Vector{X: 60, Y: 50},
-		Mass:     1,
-		Shape : "Circle",
-		Radius : 40,
-		IsMovable : true,
+		Position:  vector.Vector{X: 400, Y: 300},
+		Velocity:  vector.Vector{X: 60, Y: 50},
+		Mass:      1,
+		Shape:     "Circle",
+		Radius:    40,
+		IsMovable: true,
 	}
 	ball3 = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 400, Y: 400},
-		Velocity: vector.Vector{X: -60, Y: 50},
-		Mass:     1,
-		Shape : "Circle",
-		Radius : 50,
-		IsMovable : true,
+		Position:  vector.Vector{X: 400, Y: 400},
+		Velocity:  vector.Vector{X: -60, Y: 50},
+		Mass:      1,
+		Shape:     "Circle",
+		Radius:    50,
+		IsMovable: true,
 	}
 
 	// Run the game loop

@@ -3,11 +3,11 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
 	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/dynamics/collision"
+	"image/color"
 	// "fmt"
 )
 
@@ -20,29 +20,29 @@ var (
 func update() error {
 	// Handle input for the platform movement
 	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
-		ball.Position.X += -50*dt
+		ball.Position.X += -50 * dt
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyRight) {
-		ball.Position.X += 50*dt
+		ball.Position.X += 50 * dt
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyUp) {
 		ball.Velocity.Y -= 5
 	}
 
-	if(ball.Position.Y <0 ){
-		ball.Velocity.Y = 0;
+	if ball.Position.Y < 0 {
+		ball.Velocity.Y = 0
 	}
 
 	// Update the physics simulation
-	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
-	github.com/rudransh61/Physix-go.ApplyForce(platform, ball.Force, dt)
+	physix.ApplyForce(ball, ball.Force, dt)
+	physix.ApplyForce(platform, ball.Force, dt)
 	ball.Force.Y = 5
 	// Check for collision between ball and platform
 	if collision.RectangleCollided(ball, platform) {
 		// fmt.Println("Bounced!")
 		// collision.BounceOnCollision(ball, platform, 0)
 		ball.Force.Y = 0
-		ball.Velocity.Y=0
+		ball.Velocity.Y = 0
 	}
 
 	return nil

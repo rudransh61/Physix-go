@@ -3,10 +3,10 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/polygon"
 	"github.com/rudransh61/Physix-go/pkg/vector"
-	"github.com/rudransh61/Physix-go/dynamics/physics"
+	"image/color"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 func update() error {
 	// Apply a force to simulate gravity
 	gravity := vector.Vector{X: 0, Y: 10}
-	github.com/rudransh61/Physix-go.ApplyForcePolygon(ball, gravity, dt)
+	physix.ApplyForcePolygon(ball, gravity, dt)
 
 	// Bounce off the walls
 	if ball.Position.X < 0 || ball.Position.X > 400 {
@@ -37,8 +37,8 @@ func draw(screen *ebiten.Image) {
 		ebitenutil.DrawRect(screen, v.X, v.Y, 10, 10, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 	}
 	for _, v1 := range ball.Vertices {
-		for _, v2 := range ball.Vertices{
-			ebitenutil.DrawLine(screen, v1.X, v1.Y, v2.X, v2.Y , color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff} )
+		for _, v2 := range ball.Vertices {
+			ebitenutil.DrawLine(screen, v1.X, v1.Y, v2.X, v2.Y, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
 		}
 	}
 }

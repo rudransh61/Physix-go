@@ -3,10 +3,10 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
 	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
+	"image/color"
 	// "log"
 )
 
@@ -18,9 +18,8 @@ var (
 func update() error {
 	ball.ApplyTorque(1)
 	// Update the github.com/rudransh61/Physix-go simulation
-	github.com/rudransh61/Physix-go.ApplyForce(ball, ball.Force, dt)
+	physix.ApplyForce(ball, ball.Force, dt)
 	// github.com/rudransh61/Physix-go.UpdateRotation(ball,dt)
-
 
 	return nil
 }
@@ -37,11 +36,11 @@ func main() {
 
 	// Initialize a rigid body with your github.com/rudransh61/Physix-go engine
 	ball = &rigidbody.RigidBody{
-		Position: vector.Vector{X: 100, Y: 400},
-		Velocity: vector.Vector{X: 30, Y: -20},
-		Mass:     1,
-		Force : vector.Vector{X: 0, Y: 0},
-		IsMovable : true,
+		Position:  vector.Vector{X: 100, Y: 400},
+		Velocity:  vector.Vector{X: 30, Y: -20},
+		Mass:      1,
+		Force:     vector.Vector{X: 0, Y: 0},
+		IsMovable: true,
 	}
 
 	// Run the game loop
