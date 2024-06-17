@@ -17,16 +17,17 @@ import (
 // PVEBody extends rigidbody.RigidBody with Heat field
 type PVEBody struct {
 	*rigidbody.RigidBody
-	Heat float64 // Heat of the particle
+	Heat  float64 // Heat of the particle
+	Color color.RGBA
 }
 
 var (
 	balls           []*PVEBody // Using PVEBody instead of rigidbody.RigidBody
 	dt              = 0.1
 	ticker          *time.Ticker
-	initialInterval = time.Second /5 // Initial interval for adding particles
+	initialInterval = time.Second / 5 // Initial interval for adding particles
 	center          vector.Vector     // Center of the screen
-	limit           = 1000
+	limit           = 10000
 
 	// Broad-phase spatial hash
 	spatialHash *broadphase.SpatialHash
@@ -35,10 +36,10 @@ var (
 const (
 	Mass       = 1
 	Shape      = "Circle"
-	Radius     = 10      // Tiny particles
-	Friction   = 0.899   // Friction coefficient
-	Gravity    = 50      // Strength of gravity towards the center
-	InitRadius = 1000.0  // Initial radius of particle distribution
+	Radius     = 2     // Tiny particles
+	Friction   = 0.899 // Friction coefficient
+	Gravity    = 50    // Strength of gravity towards the center
+	InitRadius = 1000.0 // Initial radius of particle distribution
 )
 
 var (
@@ -51,7 +52,9 @@ func update() error {
 	if particlesAdded < maxParticles {
 		select {
 		case <-ticker.C:
-			addParticle()
+			for i := 0; i < 14; i++ {
+				addParticle()
+			}
 		default:
 		}
 	}
@@ -99,14 +102,7 @@ func update() error {
 func draw(screen *ebiten.Image) {
 	for _, ball := range balls {
 		// Determine the color based on heat
-		colorValue := uint8(rand.Int())
-		colorValue1 := uint8(rand.Int())
-		colorValue2 := uint8(rand.Int())
-
-		// Set color based on heat
-		color := color.RGBA{R: colorValue1, G: colorValue2, B: colorValue, A: 0xff}
-
-		ebitenutil.DrawCircle(screen, ball.Position.X, ball.Position.Y, ball.Radius, color)
+		ebitenutil.DrawCircle(screen, ball.Position.X, ball.Position.Y, ball.Radius, ball.Color)
 	}
 }
 
@@ -125,7 +121,7 @@ func main() {
 	spatialHash = broadphase.NewSpatialHash(cellSize, float64(screenWidth), float64(screenHeight))
 
 	// Initialize with a few particles
-	initializeBalls(1)
+	initializeBalls(10000)
 
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		panic(err)
@@ -140,6 +136,9 @@ func initializeBalls(n int) {
 		radius := rand.Float64() * InitRadius
 		x := center.X + radius*math.Cos(angle)
 		y := center.Y + radius*math.Sin(angle)
+		colorValue := uint8(rand.Int())
+		colorValue1 := uint8(rand.Int())
+		colorValue2 := uint8(rand.Int())
 		ball := &PVEBody{
 			RigidBody: &rigidbody.RigidBody{
 				Position:  vector.Vector{X: x, Y: y},
@@ -149,7 +148,8 @@ func initializeBalls(n int) {
 				Radius:    Radius,
 				IsMovable: true,
 			},
-			Heat: 100.0, // Set initial heat value
+			Color: color.RGBA{R: colorValue1, G: colorValue2, B: colorValue, A: 0xff},
+			Heat:  100.0, // Set initial heat value
 		}
 		balls = append(balls, ball)
 	}
@@ -160,6 +160,9 @@ func addParticle() {
 	screenWidth, screenHeight := ebiten.WindowSize()
 	x := rand.Float64() * float64(screenWidth)
 	y := rand.Float64() * float64(screenHeight)
+	colorValue := uint8(rand.Int())
+	colorValue1 := uint8(rand.Int())
+	colorValue2 := uint8(rand.Int())
 	ball := &PVEBody{
 		RigidBody: &rigidbody.RigidBody{
 			Position:  vector.Vector{X: x, Y: y},
@@ -169,9 +172,11 @@ func addParticle() {
 			Radius:    Radius,
 			IsMovable: true,
 		},
-		Heat: 100.0, // Set initial heat value
+		Color: color.RGBA{R: colorValue1, G: colorValue2, B: colorValue, A: 0xff},
+		Heat:  100.0, // Set initial heat value
 	}
 	balls = append(balls, ball)
+	particlesAdded++
 }
 
 type Game struct{}
@@ -211,28 +216,20 @@ func resolveCollision(ball1, ball2 *rigidbody.RigidBody, balls []*PVEBody) {
 
 	if distanceMagnitude < minimumDistance {
 		moveDirection := distance.Normalize()
-		overlap := (minimumDistance - distanceMagnitude)*5
+		overlap := (minimumDistance - distanceMagnitude) * 5
 
 		// Calculate the repulsive force magnitude based on the overlap
 		mag := 10.0
-		if len(balls) >= limit {
-			mag = 550
-		}
 		repulsiveForceMagnitude := overlap * mag // Adjust this factor as needed for desired effect
 		repulsiveForce := moveDirection.Scale(repulsiveForceMagnitude)
 
-		// if len(balls) >= limit {
-		// 	mag = 10
-		// 	limit += 1000
-		// }
-
 		// Apply the repulsive force to the velocities of the balls
-		ball1.Velocity = ball1.Velocity.Add(repulsiveForce.Scale(dt / ball1.Mass))
-		ball2.Velocity = ball2.Velocity.Add(repulsiveForce.Scale(-dt / ball2.Mass))
+		ball1.Velocity = ball1.Velocity.Add(repulsiveForce.Scale(dt / ball1.Mass).Scale(0.9))
+		ball2.Velocity = ball2.Velocity.Add(repulsiveForce.Scale(-dt / ball2.Mass).Scale(0.9))
 
 		// Adjust positions slightly to avoid sticking
-		correctionFactor := 1.0 // Adjust this factor as needed for desired effect
-		positionCorrection := moveDirection.Scale(correctionFactor * overlap*10)
+		correctionFactor := 0.5 // Adjust this factor as needed for desired effect
+		positionCorrection := moveDirection.Scale(correctionFactor * overlap * 5)
 		ball1.Force = ball1.Force.Add(positionCorrection)
 		ball2.Force = ball2.Force.Sub(positionCorrection)
 	}
