@@ -12,7 +12,7 @@ import (
 // Update updates the physics simulation.
 func Update(objects []interface{}, dt float64) {
     // Create a spatial hash with an appropriate cell size
-    spatialHash := broadphase.NewSpatialHash(50.0)
+    spatialHash := broadphase.NewSpatialHash(50.0,100,100)
 
     // Insert objects into the spatial hash
     for _, obj := range objects {
