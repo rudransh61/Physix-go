@@ -30,6 +30,7 @@ func update() error {
 	for _, ball := range balls {
 		gravity := vector.Vector{X: 0, Y: 0}
 		physix.ApplyForce(ball, gravity, dt)
+		physix.ApplyForce(ball , ball.Velocity.Scale(-2), dt)
 		checkWallCollision(ball)
 	}
 
@@ -37,11 +38,11 @@ func update() error {
 	for i := 0; i < len(balls); i++ {
 		for j := i + 1; j < len(balls); j++ {
 			if collision.RectangleCollided(balls[i], balls[j]) {
+				collision.BounceOnCollision(balls[i], balls[j], 1.5)
 				if check < 2 {
-					resolveCollision(balls[i], balls[j])
+					// resolveCollision(balls[i], balls[j])
 					// check = 4
 				}
-				collision.BounceOnCollision(balls[i], balls[j], 1.0)
 			}
 		}
 	}
@@ -80,11 +81,12 @@ func resolveCollision(ball1, ball2 *rigidbody.RigidBody) {
 		// Calculate the amount by which to move the balls apart
 		moveAmount := minimumDistance - distanceMagnitude
 		// Calculate the movement vectors for each ball
-		moveVector1 := moveDirection.Scale(moveAmount / 2)
-		moveVector2 := moveDirection.Scale(-moveAmount / 2)
+		moveVector1 := moveDirection.Scale(-moveAmount*20 )
+		moveVector2 := moveDirection.Scale(moveAmount *20)
 		// Move the balls apart
 		ball1.Position = ball1.Position.Add(moveVector1)
 		ball2.Position = ball2.Position.Add(moveVector2)
+		
 	}
 }
 

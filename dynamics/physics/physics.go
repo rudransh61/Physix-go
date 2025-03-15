@@ -59,12 +59,14 @@ func ApplyForce(rb *rigidbody.RigidBody, force vector.Vector, dt float64) {
 
 		rb.Force = force
 		acceleration := rb.Force.Scale(1 / rb.Mass)
+        
+        // used velocity verlet technique now;
+
+        // Update position using velocity and time step
+        rb.Position = rb.Position.Add(rb.Velocity.Scale(dt).Add(acceleration.Scale(dt*dt*0.5)));
 
 		// Update velocity using acceleration and time step
 		rb.Velocity = rb.Velocity.Add(acceleration.Scale(dt))
-
-		// Update position using velocity and time step
-		rb.Position = rb.Position.Add(rb.Velocity.Scale(dt))
 	}
 }
 

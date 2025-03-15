@@ -27,7 +27,7 @@ func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
     // fmt.Println("Entering BounceOnCollision function")
     // defer fmt.Println("Exiting BounceOnCollision function")
     
-    if rect1.IsMovable && rect2.IsMovable {
+    // if rect1.IsMovable && rect2.IsMovable {
         // Calculate the center of mass velocities
         v1 := rect1.Velocity
         m1 := rect1.Mass
@@ -36,13 +36,13 @@ func BounceOnCollision(rect1, rect2 *rigidbody.RigidBody, e float64) {
 
         rect1.Velocity = v1.Scale((m1 - e*m2) / (m1 + m2)).Add(v2.Scale((1 + e) * m2 / (m1 + m2)))
         rect2.Velocity = v2.Scale((m2 - e*m1) / (m1 + m2)).Add(v1.Scale((1 + e) * m1 / (m1 + m2)))
-    } else if rect1.IsMovable && !rect2.IsMovable {
-        // Bounce only rect1
-        rect1.Velocity = rect1.Velocity.Scale(-e)
-    } else if !rect1.IsMovable && rect2.IsMovable {
-        // Bounce only rect2
-        rect2.Velocity = rect2.Velocity.Scale(-e)
-    }
+    // } else if rect1.IsMovable && !rect2.IsMovable {
+    //     // Bounce only rect1
+    //     rect2.Velocity = rect1.Velocity.Scale(-e)
+    // } else if !rect1.IsMovable && rect2.IsMovable {
+    //     // Bounce only rect2
+    //     rect2.Velocity = rect2.Velocity.Scale(-e)
+    // }
     // No bounce if both are static
 }
 

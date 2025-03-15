@@ -16,10 +16,11 @@ import (
 var (
 	balls []*rigidbody.RigidBody
 	dt    = 0.1
+	e = 1.0
 )
 
 const (
-	Mass   = 2
+	Mass   = 0.0002
 	Shape  = "Circle"
 	Radius = 10
 )
@@ -28,21 +29,21 @@ func checkwall(ball *rigidbody.RigidBody) {
 	// Bounce off the walls
 	if ball.Position.X < 100+ball.Radius || ball.Position.X > 600-ball.Radius {
 		if ball.Position.X < 100+ball.Radius {
-			ball.Velocity.X = math.Abs(ball.Velocity.X * 0.7)
+			ball.Velocity.X = math.Abs(ball.Velocity.X * e)
 			ball.Position.X = 100 + ball.Radius
 		}
 		if ball.Position.X > 600-ball.Radius {
-			ball.Velocity.X = -0.7 * math.Abs(ball.Velocity.X)
+			ball.Velocity.X = -e * math.Abs(ball.Velocity.X)
 			ball.Position.X = 600 - ball.Radius
 		}
 	}
 	if ball.Position.Y < 100+ball.Radius || ball.Position.Y > 600-ball.Radius {
 		if ball.Position.Y < 100+ball.Radius {
-			ball.Velocity.Y = math.Abs(ball.Velocity.Y * 0.7)
+			ball.Velocity.Y = math.Abs(ball.Velocity.Y * e)
 			ball.Position.Y = 100 + ball.Radius
 		}
 		if ball.Position.Y > 600-ball.Radius {
-			ball.Velocity.Y = -0.7 * math.Abs(ball.Velocity.Y)
+			ball.Velocity.Y = -e * math.Abs(ball.Velocity.Y)
 			ball.Position.Y = 600 - ball.Radius
 		}
 	}
@@ -51,19 +52,27 @@ func checkwall(ball *rigidbody.RigidBody) {
 func update() error {
 	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
-		physix.ApplyForce(ball, gravity, dt)
+		physix.ApplyForce(ball, gravity.Scale(Mass), dt)
 		checkwall(ball)
 	}
-
-	for i := 0; i < len(balls); i++ {
-		for j := i + 1; j < len(balls); j++ {
-			if collision.CircleCollided(balls[i], balls[j]) {
-				// fmt.Println("Collision!")
-				resolveCollision(balls[i], balls[j])
-				collision.BounceOnCollision(balls[i], balls[j], 1.0)
+	for iter:=0;iter<7;iter++{
+		for i := 0; i < len(balls); i++ {
+			for j := i + 1; j < len(balls); j++ {
+				if collision.CircleCollided(balls[i], balls[j]) {
+					// fmt.Println("Collision!")
+					resolveCollision(balls[i], balls[j])
+					collision.BounceOnCollision(balls[i], balls[j], e)
+				}
 			}
 		}
 	}
+	var ke =0.0 ;
+	for i := 0; i < len(balls); i++ {
+		ke += 0.5*balls[i].Mass*balls[i].Velocity.Magnitude()*balls[i].Velocity.Magnitude();
+		ke -= balls[i].Mass*15*balls[i].Position.Y;
+	}
+	print(ke );
+	print(",")
 
 	return nil
 }
