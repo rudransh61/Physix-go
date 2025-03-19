@@ -7,9 +7,15 @@
 </div>
 
 <div align="center">
-  <img src="/example.gif" width="200">
-  <img src="/example1.gif" width="200">
-  <img src="/example2.gif" width="200">
+  <img src="/example_gifs/ex1.gif" width="200">
+  <img src="/example_gifs/ex2.gif" width="200">
+  <img src="/example_gifs/ex3.gif" width="200">
+  <img src="/example_gifs/ex4.gif" width="200">
+  <img src="/example_gifs/ex5.gif" width="200">
+  <img src="/example_gifs/ex6.gif" width="200">
+  <img src="/example_gifs/ex7.gif" width="200">
+  <img src="/example_gifs/ex8.gif" width="200">
+  <img src="/example_gifs/ex9.gif" width="200">
 </div>
 
 ## Introduction

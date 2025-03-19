@@ -15,7 +15,8 @@ import (
 
 var (
 	balls []*rigidbody.RigidBody
-	dt    = 0.1
+	dt    = 0.001
+	e = 1.0
 )
 
 const (
