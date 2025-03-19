@@ -1,12 +1,95 @@
 package physix
 
 import (
-	// "math"
-	"github.com/rudransh61/Physix-go/pkg/polygon"
-	"github.com/rudransh61/Physix-go/pkg/rigidbody"
-	"github.com/rudransh61/Physix-go/pkg/vector"
-	"math"
+    "github.com/rudransh61/Physix-go/pkg/vector"
+    "github.com/rudransh61/Physix-go/pkg/rigidbody"
+    "github.com/rudransh61/Physix-go/pkg/polygon"
+    "github.com/rudransh61/Physix-go/dynamics/collision"
+    "github.com/rudransh61/Physix-go/pkg/broadphase"
+    "math"
 )
+
+// Update updates the physics simulation.
+func Update(objects []interface{}, dt float64) {
+    // Create a spatial hash with an appropriate cell size
+    spatialHash := broadphase.NewSpatialHash(50.0,100,100)
+
+    // Insert objects into the spatial hash
+    for _, obj := range objects {
+        switch obj := obj.(type) {
+        case *rigidbody.RigidBody:
+            spatialHash.Add(obj, obj.Position)
+        case *polygon.Polygon:
+            spatialHash.Add(obj, obj.Position)
+        }
+    }
+
+    // Broad-phase collision detection
+    potentialCollisions := make(map[interface{}]map[interface{}]bool)
+    for _, obj := range objects {
+        var position vector.Vector
+        switch obj := obj.(type) {
+        case *rigidbody.RigidBody:
+            position = obj.Position
+        case *polygon.Polygon:
+            position = obj.Position
+        }
+
+        nearbyObjects := spatialHash.Query(position)
+        for _, other := range nearbyObjects {
+            if obj == other {
+                continue
+            }
+            if _, exists := potentialCollisions[obj]; !exists {
+                potentialCollisions[obj] = make(map[interface{}]bool)
+            }
+            potentialCollisions[obj][other] = true
+        }
+    }
+
+    // Narrow-phase collision detection and response
+    for obj, colliders := range potentialCollisions {
+        for collider := range colliders {
+            switch obj := obj.(type) {
+            case *rigidbody.RigidBody:
+                switch collider := collider.(type) {
+                case *rigidbody.RigidBody:
+                    if collision.RectangleCollided(obj, collider) {
+                        collision.BounceOnCollision(obj, collider, 1.0)
+                    } else if collision.CircleCollided(obj, collider) {
+                        collision.BounceOnCollision(obj, collider, 1.0)
+                    }
+                case *polygon.Polygon:
+                    if collision.CirclePolygonCollision(obj, collider) {
+                        collision.ResolveCollision(collider, collider, 1.0, 0.1)
+                    }
+                }
+            case *polygon.Polygon:
+                switch collider := collider.(type) {
+                case *rigidbody.RigidBody:
+                    if collision.CirclePolygonCollision(collider, obj) {
+                        collision.ResolveCollision(obj, obj, 1.0, 0.1)
+                    }
+                case *polygon.Polygon:
+                    if collision.PolygonCollision(obj, collider) {
+                        collision.ResolveCollision(obj, collider, 1.0, 0.1)
+                    }
+                }
+            }
+        }
+    }
+
+    // Update positions and velocities based on forces and impulses
+    for _, obj := range objects {
+        switch obj := obj.(type) {
+        case *rigidbody.RigidBody:
+            ApplyForce(obj,obj.Force, dt)
+            UpdateRotation(obj, dt)
+        case *polygon.Polygon:
+            ApplyForcePolygon(obj,obj.Force, dt)
+        }
+    }
+}
 
 // ApplyForcePolygon applies force to a polygon and rotates every vertex about the centroid.
 func ApplyForcePolygon(pg *polygon.Polygon, force vector.Vector, dt float64) {

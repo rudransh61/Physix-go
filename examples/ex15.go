@@ -16,7 +16,6 @@ import (
 var (
 	balls []*rigidbody.RigidBody
 	dt    = 0.1
-	e = 1.0
 )
 
 const (
@@ -52,27 +51,19 @@ func checkwall(ball *rigidbody.RigidBody) {
 func update() error {
 	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
-		physix.ApplyForce(ball, gravity.Scale(Mass), dt)
+		physix.ApplyForce(ball, gravity, dt)
 		checkwall(ball)
 	}
-	for iter:=0;iter<7;iter++{
-		for i := 0; i < len(balls); i++ {
-			for j := i + 1; j < len(balls); j++ {
-				if collision.CircleCollided(balls[i], balls[j]) {
-					// fmt.Println("Collision!")
-					resolveCollision(balls[i], balls[j])
-					collision.BounceOnCollision(balls[i], balls[j], e)
-				}
+
+	for i := 0; i < len(balls); i++ {
+		for j := i + 1; j < len(balls); j++ {
+			if collision.CircleCollided(balls[i], balls[j]) {
+				// fmt.Println("Collision!")
+				resolveCollision(balls[i], balls[j])
+				collision.BounceOnCollision(balls[i], balls[j], 1.0)
 			}
 		}
 	}
-	var ke =0.0 ;
-	for i := 0; i < len(balls); i++ {
-		ke += 0.5*balls[i].Mass*balls[i].Velocity.Magnitude()*balls[i].Velocity.Magnitude();
-		ke -= balls[i].Mass*15*balls[i].Position.Y;
-	}
-	print(ke );
-	print(",")
 
 	return nil
 }
