@@ -18,9 +18,12 @@
   <img src="/example_gifs/ex9.gif" width="200"> -->
   | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-|<img src="/example_gifs/ex10.gif" width="200">[Platformer](examples/)|<img src="/example_gifs/ex1.gif" width="200">  [RigidBody](examples/) |  <img src="/example_gifs/ex2.gif" width="200"> [Soft Body](examples/)|<img src="/example_gifs/ex3.gif" width="200">[Particle Sytem](examples/)
-|  <img src="/example_gifs/ex4.gif" width="200">[Particle System 2](examples/) |<img src="/example_gifs/ex5.gif" width="200"> [Bounce](examples/)|<img src="/example_gifs/ex6.gif" width="200"> [Collision](examples/)|
-|<img src="/example_gifs/ex7.gif" width="200">[Collision](examples/)  | <img src="/example_gifs/ex8.gif" width="200"> [Circular Motion](examples/) |<img src="/example_gifs/ex9.gif" width="200">[Projectile](examples/)|
+| <img src="/example_gifs/ex10.gif" width="200"> [Platformer](examples/) | <img src="/example_gifs/ex1.gif" width="200"> [RigidBody](examples/) | <img src="/example_gifs/ex2.gif" width="200"> [Soft Body](examples/) |
+| <img src="/example_gifs/ex3.gif" width="200"> [Particle System](examples/) | <img src="/example_gifs/ex4.gif" width="200"> [Particle System 2](examples/) | <img src="/example_gifs/ex5.gif" width="200"> [Bounce](examples/) |
+| <img src="/example_gifs/ex6.gif" width="200"> [Collision](examples/) | <img src="/example_gifs/ex7.gif" width="200"> [Collision](examples/) | <img src="/example_gifs/ex8.gif" width="200"> [Circular Motion](examples/) |
+| <img src="/example_gifs/ex9.gif" width="200"> [Projectile](examples/) | | |
+
+
 </div>
 
 ## Introduction
