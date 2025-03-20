@@ -7,59 +7,125 @@ import (
 	"github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"image/color"
-	// "fmt"
+	"math"
 )
-
+// platformer
 var (
-	ball     *rigidbody.RigidBody
-	platform *rigidbody.RigidBody
-	dt       = 0.1
+	ball      *rigidbody.RigidBody
+	platform1 *rigidbody.RigidBody
+	platform2 *rigidbody.RigidBody
+	platform3 *rigidbody.RigidBody
+	dt        = 0.1
+	jumped    = false
+	camX, camY float64
 )
+func resolveCollision(ball, platform *rigidbody.RigidBody) {
+	xOverlap := (ball.Position.X + ball.Width) - platform.Position.X
+	if platform.Position.X+platform.Width < ball.Position.X {
+		xOverlap = (platform.Position.X + platform.Width) - ball.Position.X
+	}
+
+yOverlap := (ball.Position.Y + ball.Height) - platform.Position.Y
+	if platform.Position.Y+platform.Height < ball.Position.Y {
+		yOverlap = (platform.Position.Y + platform.Height) - ball.Position.Y
+	}
+
+	if xOverlap < yOverlap {
+		// Resolve horizontal collision
+		if ball.Position.X < platform.Position.X {
+			ball.Position.X = platform.Position.X - ball.Width
+		} else {
+			ball.Position.X = platform.Position.X + platform.Width
+		}
+		ball.Velocity.X = 0
+	} else {
+		// Resolve vertical collision
+		if ball.Position.Y < platform.Position.Y {
+			ball.Position.Y = platform.Position.Y - ball.Height
+			ball.Velocity.Y = 0
+			ball.Force.Y = 0
+		} else {
+			ball.Position.Y = platform.Position.Y + platform.Height
+			ball.Velocity.Y = -math.Abs(ball.Velocity.Y) * 0.75
+		}
+	}
+}
 
 func update() error {
-	// Handle input for the platform movement
-	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
-		ball.Position.X += -50 * dt
+	// Camera movement
+	if ebiten.IsKeyPressed(ebiten.KeyA) {
+		camX -= 5
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyRight) {
-		ball.Position.X += 50 * dt
+	if ebiten.IsKeyPressed(ebiten.KeyD) {
+		camX += 5
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyUp) {
-		ball.Velocity.Y -= 5
+	if ebiten.IsKeyPressed(ebiten.KeyW) {
+		camY -= 5
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyS) {
+		camY += 5
 	}
 
-	if ball.Position.Y < 0 {
-		ball.Velocity.Y = 0
+	// Handle input for the platform movement
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		ball.Position.X += -15 * dt
+		camX -= 16 * dt
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		ball.Position.X += 15 * dt
+		camX += 14 * dt
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
+		if ball.Velocity.Y < 2 && ball.Velocity.Y > -2 {
+			ball.Velocity.Y -= 50
+		}
+	}
+
+	if ball.Velocity.Y < 2 {
+		jumped = false
 	}
 
 	// Update the physics simulation
+	camY += ball.Velocity.Y * dt * 0.95
 	physix.ApplyForce(ball, ball.Force, dt)
-	physix.ApplyForce(platform, ball.Force, dt)
+	physix.ApplyForce(platform1, ball.Force, dt)
+	physix.ApplyForce(platform2, ball.Force, dt)
+	physix.ApplyForce(platform3, ball.Force, dt)
 	ball.Force.Y = 5
-	// Check for collision between ball and platform
-	if collision.RectangleCollided(ball, platform) {
-		// fmt.Println("Bounced!")
-		// collision.BounceOnCollision(ball, platform, 0)
-		ball.Force.Y = 0
-		ball.Velocity.Y = 0
+
+	// Check for collision between ball and platforms
+	if collision.RectangleCollided(ball, platform1) {
+		resolveCollision(ball, platform1)
+	}
+	if collision.RectangleCollided(ball, platform2) {
+		resolveCollision(ball, platform2)
+	}
+	if collision.RectangleCollided(ball, platform3) {
+		resolveCollision(ball, platform3)
 	}
 
 	return nil
 }
 
 func draw(screen *ebiten.Image) {
-	// Draw the rectangle using the physics engine's position
-	ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, ball.Width, ball.Height, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
-	ebitenutil.DrawRect(screen, platform.Position.X, platform.Position.Y, platform.Width, platform.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	// Apply camera transformation
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(-camX, -camY)
+
+	// Draw ball and platforms with camera offset
+	ebitenutil.DrawRect(screen, ball.Position.X-camX, ball.Position.Y-camY, ball.Width, ball.Height, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, platform1.Position.X-camX, platform1.Position.Y-camY, platform1.Width, platform1.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, platform2.Position.X-camX, platform2.Position.Y-camY, platform2.Width, platform2.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
+	ebitenutil.DrawRect(screen, platform3.Position.X-camX, platform3.Position.Y-camY, platform3.Width, platform3.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
 }
 
 func main() {
-	// Set up the window
 	ebiten.SetWindowSize(400, 400)
 	ebiten.SetWindowTitle("Bouncing Ball - feat Gravity")
 
-	// Initialize a rigid body with your physics engine
+	// Initialize objects
 	ball = &rigidbody.RigidBody{
 		Position:  vector.Vector{X: 400, Y: 100},
 		Velocity:  vector.Vector{X: 0, Y: 2},
@@ -67,40 +133,55 @@ func main() {
 		Force:     vector.Vector{X: 0, Y: 5},
 		IsMovable: true,
 		Shape:     "Rectangle",
-		Width:     50,
-		Height:    50,
+		Width:     25,
+		Height:    45,
 	}
 
-	platform = &rigidbody.RigidBody{
+	platform1 = &rigidbody.RigidBody{
 		Position:  vector.Vector{X: 100, Y: 600},
 		Velocity:  vector.Vector{X: 0, Y: 0},
 		Mass:      rigidbody.Infinite_mass,
 		IsMovable: true,
 		Shape:     "Rectangle",
-		Width:     1000,
+		Width:     200,
 		Height:    50,
 	}
 
-	// Run the game loop
+	platform2 = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 400, Y: 450},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      rigidbody.Infinite_mass,
+		IsMovable: true,
+		Shape:     "Rectangle",
+		Width:     200,
+		Height:    50,
+	}
+
+	platform3 = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 700, Y: 300},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      rigidbody.Infinite_mass,
+		IsMovable: true,
+		Shape:     "Rectangle",
+		Width:     200,
+		Height:    50,
+	}
+
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		panic(err)
 	}
 }
 
-// Game represents the game state.
 type Game struct{}
 
-// Update updates the game logic.
 func (g *Game) Update() error {
 	return update()
 }
 
-// Draw draws the game.
 func (g *Game) Draw(screen *ebiten.Image) {
 	draw(screen)
 }
 
-// Layout returns the game's screen size.
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return ebiten.ScreenSizeInFullscreen()
+	return 500, 500
 }

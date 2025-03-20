@@ -6,8 +6,8 @@
   <img src="/Phi 6.png" width="300">
 </div>
 
-<div align="center">
-  <img src="/example_gifs/ex1.gif" width="200">
+<div >
+  <!-- <img src="/example_gifs/ex1.gif" width="200">
   <img src="/example_gifs/ex2.gif" width="200">
   <img src="/example_gifs/ex3.gif" width="200">
   <img src="/example_gifs/ex4.gif" width="200">
@@ -15,7 +15,12 @@
   <img src="/example_gifs/ex6.gif" width="200">
   <img src="/example_gifs/ex7.gif" width="200">
   <img src="/example_gifs/ex8.gif" width="200">
-  <img src="/example_gifs/ex9.gif" width="200">
+  <img src="/example_gifs/ex9.gif" width="200"> -->
+  | | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img src="/example_gifs/ex10.gif" width="200">[Platformer](examples/)|<img src="/example_gifs/ex1.gif" width="200">  [RigidBody](examples/) |  <img src="/example_gifs/ex2.gif" width="200"> [Soft Body](examples/)|<img src="/example_gifs/ex3.gif" width="200">[Particle Sytem](examples/)
+|  <img src="/example_gifs/ex4.gif" width="200">[Particle System 2](examples/) |<img src="/example_gifs/ex5.gif" width="200"> [Bounce](examples/)|<img src="/example_gifs/ex6.gif" width="200"> [Collision](examples/)|
+|<img src="/example_gifs/ex7.gif" width="200">[Collision](examples/)  | <img src="/example_gifs/ex8.gif" width="200"> [Circular Motion](examples/) |<img src="/example_gifs/ex9.gif" width="200">[Projectile](examples/)|
 </div>
 
 ## Introduction
@@ -40,6 +45,11 @@ Physix.go is a simple, easy-to-use, and fast physics engine written in GoLang. I
 To start, clone this project:
 ```bash
 git clone https://github.com/rudransh61/Physix.go
+```
+
+Or install it using `go get`:
+```bash
+go get github.com/rudransh61/Physix.go
 ```
 
 Then run the example files from the `./examples` folder. For example:
@@ -138,7 +148,7 @@ ball = &rigidbody.RigidBody{
 To update the position of a RigidBody, use **ApplyForce** in a loop:
 ```go
 for i := 0; i < 100; i++ {
-    physics.ApplyForce(ball, vector.Vector{X: 10, Y: 0}, dt) // Apply force
+    physix.ApplyForce(ball, vector.Vector{X: 10, Y: 0}, dt) // Apply force
     // .. other code
 }
 ```
@@ -243,7 +253,7 @@ ball = &rigidbody.RigidBody{
 	IsMovable: true,
 }
 
-physics.ApplyForce(ball, vector.Vector{X: 10, Y: 0}, dt) // To apply force on the rigid body
+physix.ApplyForce(ball, vector.Vector{X: 10, Y: 0}, dt) // To apply force on the rigid body
 ```
 
 To get both utilities in the code, import this file:

@@ -40,8 +40,8 @@ func update() error {
 			if collision.RectangleCollided(balls[i], balls[j]) {
 				collision.BounceOnCollision(balls[i], balls[j], 1.5)
 				if check < 2 {
-					// resolveCollision(balls[i], balls[j])
-					// check = 4
+					resolveCollision(balls[i], balls[j])
+					check = 4
 				}
 			}
 		}
