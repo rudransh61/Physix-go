@@ -16,12 +16,28 @@
   <img src="/example_gifs/ex7.gif" width="200">
   <img src="/example_gifs/ex8.gif" width="200">
   <img src="/example_gifs/ex9.gif" width="200"> -->
-  | | | |
-|:-------------------------:|:-------------------------:|:-------------------------:|
-| <img src="/example_gifs/ex10.gif" width="200"> [Platformer](examples/) | <img src="/example_gifs/ex1.gif" width="200"> [RigidBody](examples/) | <img src="/example_gifs/ex2.gif" width="200"> [Soft Body](examples/) |
-| <img src="/example_gifs/ex3.gif" width="200"> [Particle System](examples/) | <img src="/example_gifs/ex4.gif" width="200"> [Particle System 2](examples/) | <img src="/example_gifs/ex5.gif" width="200"> [Bounce](examples/) |
-| <img src="/example_gifs/ex6.gif" width="200"> [Collision](examples/) | <img src="/example_gifs/ex7.gif" width="200"> [Collision](examples/) | <img src="/example_gifs/ex8.gif" width="200"> [Circular Motion](examples/) |
-| <img src="/example_gifs/ex9.gif" width="200"> [Projectile](examples/) | | |
+  <table>
+  <tr>
+    <td><img src="/example_gifs/ex10.gif" width="200"><br><a href="examples/">Platformer</a></td>
+    <td><img src="/example_gifs/ex1.gif" width="200"><br><a href="examples/">RigidBody</a></td>
+    <td><img src="/example_gifs/ex2.gif" width="200"><br><a href="examples/">Soft Body</a></td>
+  </tr>
+  <tr>
+    <td><img src="/example_gifs/ex3.gif" width="200"><br><a href="examples/">Particle System</a></td>
+    <td><img src="/example_gifs/ex4.gif" width="200"><br><a href="examples/">Particle System 2</a></td>
+    <td><img src="/example_gifs/ex5.gif" width="200"><br><a href="examples/">Bounce</a></td>
+  </tr>
+  <tr>
+    <td><img src="/example_gifs/ex6.gif" width="200"><br><a href="examples/">Collision</a></td>
+    <td><img src="/example_gifs/ex7.gif" width="200"><br><a href="examples/">Collision</a></td>
+    <td><img src="/example_gifs/ex8.gif" width="200"><br><a href="examples/">Circular Motion</a></td>
+  </tr>
+  <tr>
+    <td><img src="/example_gifs/ex9.gif" width="200"><br><a href="examples/">Projectile</a></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 
 </div>
