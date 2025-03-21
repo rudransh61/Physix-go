@@ -68,7 +68,7 @@ git clone https://github.com/rudransh61/Physix.go
 
 Or install it using `go get`:
 ```bash
-go get github.com/rudransh61/Physix.go
+go get github.com/rudransh61/Physix-go@v1.0.0  
 ```
 
 Then run the example files from the `./examples` folder. For example:
@@ -77,6 +77,8 @@ go run ./examples/ex4.go # which is a simple circular motion
 ```
 
 ## Documentation
+
+For more detailed documentation, refer to the [docs](https://github.com/rudransh61/Physix-go/tree/master/docs) folder.
 
 ### Vectors
 
