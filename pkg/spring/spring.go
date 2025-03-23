@@ -1,6 +1,7 @@
 package spring
 import (
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 	// "math"
 )
 
@@ -29,7 +30,7 @@ func (s *Spring) ApplyForce() {
 	force := direction.Scale(s.Stiffness * (distance - s.RestLength))
 
 	// Damping force to stabilize oscillations
-	relativeVelocity := s.BallB.Velocity.Sub(s.BallA.Velocity)
+	relativeVelocity := vector.ComponentAlong(s.BallB.Velocity.Sub(s.BallA.Velocity), delta)
 	dampingForce := relativeVelocity.Scale(s.Damping)
 
 	// Apply forces

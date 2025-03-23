@@ -56,3 +56,11 @@ func Distance(v1 Vector , v2 Vector) float64 {
 func Orthogonal(v Vector) Vector {
 	return Vector{-v.Y, v.X}
 }
+
+func ComponentAlong(A, B Vector) Vector {
+    if B.Magnitude() == 0 {
+        return Vector{0, 0} // Handle zero-length vector case
+    }
+    scale := A.InnerProduct(B) / B.InnerProduct(B) // (A · B) / (|B|^2)
+    return B.Scale(scale)        // Scale B to get projection
+}
