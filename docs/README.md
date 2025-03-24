@@ -140,3 +140,42 @@ vec_norm = vec1.Normalize()
 ```go
 vec_dist = vector.Distance(vec1,vec2)
 ```
+## Rigid Body
+
+A Rigid Body is a physical object that has mass and can be affected by forces. It has a position, velocity, and mass.
+
+import this file to use it,
+`github.com/rudransh61/Physix-go/pkg/rigidbody`
+
+### Create Rigid Body
+
+```go
+body := &rigidbody.RigidBody{
+		Position: vector.Vector{X: 50, Y: 50},
+		Velocity: vector.Vector{X: 30, Y: 20},
+		Mass:     1,
+		
+		Shape:   'Circle', // or 'Rectangle'
+		Radius:  10, // Only for Circle
+		Width:   20, // Only for Rectangle
+		Height:  30, // Only for Rectangle
+
+		IsMovable: true, // If false, it will not be affected by forces
+
+	}
+```
+
+To update the Position and Apply Force on it, use this function:
+
+```go
+dt := 0.1 // Time step for simulation
+physix.ApplyForce(ball, Force_vector, dt) // Apply force
+```
+
+NOTE: Import `github.com/rudransh61/Physix-go/dynamics/physics` to use this functions in `physix`. 
+
+Or access Velocity, Position and Mass of the Rigid Body like this:
+```go
+ball.Velocity // Get the velocity of the ball as a vector.Vector
+ball.Position.X += 5 // Increase the position of the ball in X direction by 5
+```
