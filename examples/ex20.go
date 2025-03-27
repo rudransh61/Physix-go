@@ -1,14 +1,15 @@
 package main
 
 import (
+	"image/color"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/rudransh61/Physix-go/dynamics/physics"
+	"github.com/rudransh61/Physix-go/dynamics/collision"
+	physix "github.com/rudransh61/Physix-go/dynamics/physics"
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
-	"github.com/rudransh61/Physix-go/pkg/vector"
 	"github.com/rudransh61/Physix-go/pkg/spring"
-	"image/color"
-	"math"
+	"github.com/rudransh61/Physix-go/pkg/vector"
 )
 
 // Global variables
@@ -22,9 +23,9 @@ var (
 
 // Constants
 const (
-	Gravity   = 98
+	Gravity   = 9.8
 	Stiffness = 100.0 // Spring stiffness
-	Damping   = 20  // Spring damping
+	Damping   = 5.0   // Spring damping
 )
 
 // Physics update function
@@ -34,6 +35,14 @@ func update() error {
 	// Apply gravity to each particle
 	for _, v := range square {
 		physix.ApplyForce(v, gravity.Scale(v.Mass), dt)
+		if collision.CircleRectangleCollided(v, platform1) {
+			collision.PreventCircleRectangleOverlap(v, platform1)
+			collision.BounceOnCollision(v, platform1, 1.0)
+		}
+		if collision.CircleRectangleCollided(v, platform2) {
+			collision.PreventCircleRectangleOverlap(v, platform2)
+			collision.BounceOnCollision(v, platform2, 1.0)
+		}
 	}
 
 	// Apply spring forces
@@ -41,28 +50,8 @@ func update() error {
 		s.ApplyForce()
 	}
 
-	// Check collision for each particle against both platforms
-	// Check collision for each particle against both platforms
-for _, v := range square {
-    // Collision with platform1
-    if v.Position.Y > platform1.Position.Y && 
-       v.Position.X > platform1.Position.X && 
-       v.Position.X < platform1.Position.X+platform1.Width {
-        v.Velocity.Y = -math.Abs(v.Velocity.Y)*2
-    }
-
-    // Collision with platform2
-    if v.Position.Y > platform2.Position.Y && 
-       v.Position.Y < platform2.Position.Y+platform2.Height &&
-       v.Position.X > platform2.Position.X && 
-       v.Position.X < platform2.Position.X+platform2.Width {
-        v.Velocity.Y = -v.Velocity.Y
-    }
-	// return  nil
+	return nil
 }
-return nil
-}
-
 
 // Draw function
 func draw(screen *ebiten.Image) {
@@ -79,11 +68,9 @@ func draw(screen *ebiten.Image) {
 		ebitenutil.DrawCircle(screen, v.Position.X, v.Position.Y, v.Radius, color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
 	}
 
-	// Draw platform1
+	// Draw platforms
 	ebitenutil.DrawRect(screen, platform1.Position.X, platform1.Position.Y, platform1.Width, platform1.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff})
-
-	// Draw platform2
-	ebitenutil.DrawRect(screen, platform2.Position.X, platform2.Position.Y, platform2.Width, platform2.Height, color.RGBA{R: 0, G: 0xff, B: 0xff, A: 0xff}) // Different color
+	ebitenutil.DrawRect(screen, platform2.Position.X, platform2.Position.Y, platform2.Width, platform2.Height, color.RGBA{R: 0, G: 0xff, B: 0xff, A: 0xff})
 }
 
 // Initialize simulation
@@ -92,10 +79,10 @@ func initializeSimulation() {
 	springs = make([]*spring.Spring, 6)
 
 	// Define square vertices (particles)
-	square[0] = &rigidbody.RigidBody{Position: vector.Vector{X: 200, Y: 100}, Mass: 50, Radius: 5, IsMovable: true}
-	square[1] = &rigidbody.RigidBody{Position: vector.Vector{X: 250, Y: 100}, Mass: 50, Radius: 5, IsMovable: true}
-	square[2] = &rigidbody.RigidBody{Position: vector.Vector{X: 200, Y: 150}, Mass: 50, Radius: 5, IsMovable: true}
-	square[3] = &rigidbody.RigidBody{Position: vector.Vector{X: 250, Y: 150}, Mass: 50, Radius: 5, IsMovable: true}
+	square[0] = &rigidbody.RigidBody{Position: vector.Vector{X: 200, Y: 100}, Shape: "Circle", Mass: 50, Radius: 5, IsMovable: true}
+	square[1] = &rigidbody.RigidBody{Position: vector.Vector{X: 250, Y: 100}, Shape: "Circle", Mass: 50, Radius: 5, IsMovable: true}
+	square[2] = &rigidbody.RigidBody{Position: vector.Vector{X: 200, Y: 150}, Shape: "Circle", Mass: 50, Radius: 5, IsMovable: true}
+	square[3] = &rigidbody.RigidBody{Position: vector.Vector{X: 250, Y: 150}, Shape: "Circle", Mass: 50, Radius: 5, IsMovable: true}
 
 	// Create springs between square vertices
 	springs[0] = spring.NewSpring(square[0], square[1], Stiffness, Damping)
@@ -129,8 +116,8 @@ func initializeSimulation() {
 // Game struct
 type Game struct{}
 
-func (g *Game) Update() error { return update() }
-func (g *Game) Draw(screen *ebiten.Image) { draw(screen) }
+func (g *Game) Update() error                                     { return update() }
+func (g *Game) Draw(screen *ebiten.Image)                         { draw(screen) }
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) { return 500, 400 }
 
 // Main function

@@ -8,13 +8,17 @@ import (
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
 	"image/color"
-	"math"
+	// "math"
 	"math/rand"
 	// "fmt"
 )
 
 var (
 	balls []*rigidbody.RigidBody
+	down *rigidbody.RigidBody
+	right *rigidbody.RigidBody
+	up *rigidbody.RigidBody
+	left *rigidbody.RigidBody
 	dt    = 0.001
 	e = 1.0
 )
@@ -25,71 +29,67 @@ const (
 	Radius = 10
 )
 
-func checkwall(ball *rigidbody.RigidBody) {
-	// Bounce off the walls
-	if ball.Position.X < 100+ball.Radius || ball.Position.X > 600-ball.Radius {
-		if ball.Position.X < 100+ball.Radius {
-			ball.Velocity.X = math.Abs(ball.Velocity.X * e)
-			ball.Position.X = 100 + ball.Radius
-		}
-		if ball.Position.X > 600-ball.Radius {
-			ball.Velocity.X = -e * math.Abs(ball.Velocity.X)
-			ball.Position.X = 600 - ball.Radius
-		}
-	}
-	if ball.Position.Y < 100+ball.Radius || ball.Position.Y > 600-ball.Radius {
-		if ball.Position.Y < 100+ball.Radius {
-			ball.Velocity.Y = math.Abs(ball.Velocity.Y * e)
-			ball.Position.Y = 100 + ball.Radius
-		}
-		if ball.Position.Y > 600-ball.Radius {
-			ball.Velocity.Y = -e * math.Abs(ball.Velocity.Y)
-			ball.Position.Y = 600 - ball.Radius
-		}
-	}
-}
-
 func update() error {
 	gravity := vector.Vector{X: 0, Y: 15}
 	for _, ball := range balls {
 		physix.ApplyForce(ball, gravity, dt)
-		checkwall(ball)
+		// checkwall(ball)
+		if(collision.CircleRectangleCollided(ball, down)){
+			// collision.PreventCircleRectangleOverlap(ball, down)
+			collision.BounceOnCollision(ball, down, e)
+		}
+		if(collision.CircleRectangleCollided(ball, right)){
+			// collision.PreventCircleRectangleOverlap(ball, right)
+			collision.BounceOnCollision(ball, right, e)
+		}
+		if(collision.CircleRectangleCollided(ball, up)){
+			// collision.PreventCircleRectangleOverlap(ball, up)
+			collision.BounceOnCollision(ball, up, e)
+		}
+		if(collision.CircleRectangleCollided(ball, left)){
+			// collision.PreventCircleRectangleOverlap(ball, left)
+			collision.BounceOnCollision(ball, left, e)
+		}
+	}
+	for steps:=0;steps<10;steps++{
+		for i := 0; i < len(balls); i++ {
+			for j := i + 1; j < len(balls); j++ {
+				if collision.CircleCollided(balls[i], balls[j]) {
+					// resolveCollision(balls[i], balls[j])
+					collision.PreventCircleOverlap(balls[i], balls[j])
+				}
+			}
+		}
+		for _, ball := range balls {
+			if(collision.CircleRectangleCollided(ball, down)){
+				collision.PreventCircleRectangleOverlap(ball, down)
+				// collision.BounceOnCollision(ball, down, e)
+			}
+			if(collision.CircleRectangleCollided(ball, right)){
+				collision.PreventCircleRectangleOverlap(ball, right)
+				// collision.BounceOnCollision(ball, right, e)
+			}
+			if(collision.CircleRectangleCollided(ball, up)){
+				collision.PreventCircleRectangleOverlap(ball, up)
+				// collision.BounceOnCollision(ball, up, e)
+			}
+			if(collision.CircleRectangleCollided(ball, left)){
+				collision.PreventCircleRectangleOverlap(ball, left)
+				// collision.BounceOnCollision(ball, left, e)
+			}
+		}
 	}
 
 	for i := 0; i < len(balls); i++ {
 		for j := i + 1; j < len(balls); j++ {
 			if collision.CircleCollided(balls[i], balls[j]) {
 				// fmt.Println("Collision!")
-				resolveCollision(balls[i], balls[j])
-				collision.BounceOnCollision(balls[i], balls[j], 1.0)
+				collision.BounceOnCollision(balls[i], balls[j], e)
 			}
 		}
 	}
 
 	return nil
-}
-
-func resolveCollision(ball1, ball2 *rigidbody.RigidBody) {
-	// Calculate the vector between the centers of the balls
-	distance := ball1.Position.Sub(ball2.Position)
-	// Calculate the distance between the centers of the balls
-	distanceMagnitude := distance.Magnitude()
-	// Calculate the minimum distance where the balls stop overlapping
-	minimumDistance := ball1.Radius + ball2.Radius
-
-	// Check if the balls are overlapping
-	if distanceMagnitude < minimumDistance {
-		// Calculate the direction to move the balls apart
-		moveDirection := distance.Normalize()
-		// Calculate the amount by which to move the balls apart
-		moveAmount := minimumDistance - distanceMagnitude
-		// Calculate the movement vectors for each ball
-		moveVector1 := moveDirection.Scale(moveAmount / 2)
-		moveVector2 := moveDirection.Scale(-moveAmount / 2)
-		// Move the balls apart
-		ball1.Position = ball1.Position.Add(moveVector1)
-		ball2.Position = ball2.Position.Add(moveVector2)
-	}
 }
 
 func draw(screen *ebiten.Image) {
@@ -98,10 +98,10 @@ func draw(screen *ebiten.Image) {
 	}
 
 	//Boundary
-	ebitenutil.DrawRect(screen, 600.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // right
-	ebitenutil.DrawRect(screen, 90.0, 100.0, 10, 500, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // left
-	ebitenutil.DrawRect(screen, 90.0, 100.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // up
-	ebitenutil.DrawRect(screen, 90.0, 600.0, 510, 10, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // down
+	ebitenutil.DrawRect(screen, right.Position.X, right.Position.Y, right.Width, right.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0}) // right
+	ebitenutil.DrawRect(screen, left.Position.X, left.Position.Y, left.Width, left.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // left
+	ebitenutil.DrawRect(screen, up.Position.X, up.Position.Y, up.Width, up.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // up
+	ebitenutil.DrawRect(screen, down.Position.X, down.Position.Y, down.Width, down.Height, color.RGBA{R: 0, G: 0xff, B: 0, A: 0})  // down
 }
 
 func main() {
@@ -131,6 +131,42 @@ func initializeBalls(n int) {
 			Radius:    Radius,
 			IsMovable: true,
 		}
+	}
+	down = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 100, Y: 600},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      0,
+		Shape:     "Rectangle",
+		Width:     510,
+		Height:    10,
+		IsMovable: false,
+	}
+	right = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 600, Y: 300},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      0,
+		Shape:     "Rectangle",
+		Width:     10,
+		Height:    600,
+		IsMovable: false,
+	}
+	left = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 100, Y: 300},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      0,
+		Shape:     "Rectangle",
+		Width:     10,
+		Height:    600,
+		IsMovable: false,
+	}
+	up = &rigidbody.RigidBody{
+		Position:  vector.Vector{X: 100, Y: 100},
+		Velocity:  vector.Vector{X: 0, Y: 0},
+		Mass:      0,
+		Shape:     "Rectangle",
+		Width:     510,
+		Height:    10,
+		IsMovable: false,
 	}
 }
 

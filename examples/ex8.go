@@ -9,7 +9,7 @@ import (
 	"github.com/rudransh61/Physix-go/pkg/vector"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"image/color"
-	"math"
+	// "math"
 )
 // platformer
 var (
@@ -21,38 +21,6 @@ var (
 	jumped    = false
 	camX, camY float64
 )
-func resolveCollision(ball, platform *rigidbody.RigidBody) {
-	xOverlap := (ball.Position.X + ball.Width) - platform.Position.X
-	if platform.Position.X+platform.Width < ball.Position.X {
-		xOverlap = (platform.Position.X + platform.Width) - ball.Position.X
-	}
-
-yOverlap := (ball.Position.Y + ball.Height) - platform.Position.Y
-	if platform.Position.Y+platform.Height < ball.Position.Y {
-		yOverlap = (platform.Position.Y + platform.Height) - ball.Position.Y
-	}
-
-	if xOverlap < yOverlap {
-		// Resolve horizontal collision
-		if ball.Position.X < platform.Position.X {
-			ball.Position.X = platform.Position.X - ball.Width
-		} else {
-			ball.Position.X = platform.Position.X + platform.Width
-		}
-		ball.Velocity.X = 0
-	} else {
-		// Resolve vertical collision
-		if ball.Position.Y < platform.Position.Y {
-			ball.Position.Y = platform.Position.Y - ball.Height
-			ball.Velocity.Y = 0
-			ball.Force.Y = 0
-		} else {
-			ball.Position.Y = platform.Position.Y + platform.Height
-			ball.Velocity.Y = -math.Abs(ball.Velocity.Y) * 0.75
-		}
-	}
-}
-
 func update() error {
 	// Camera movement
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
@@ -97,13 +65,16 @@ func update() error {
 
 	// Check for collision between ball and platforms
 	if collision.RectangleCollided(ball, platform1) {
-		resolveCollision(ball, platform1)
+		collision.PreventRectangleOverlap(ball, platform1)
+		collision.BounceOnCollision(ball, platform1, 0.0)
 	}
 	if collision.RectangleCollided(ball, platform2) {
-		resolveCollision(ball, platform2)
+		collision.PreventRectangleOverlap(ball, platform2)
+		collision.BounceOnCollision(ball, platform1, 0.0)
 	}
 	if collision.RectangleCollided(ball, platform3) {
-		resolveCollision(ball, platform3)
+		collision.PreventRectangleOverlap(ball, platform3)
+		collision.BounceOnCollision(ball, platform1, 0.0)
 	}
 
 	return nil
@@ -141,7 +112,7 @@ func main() {
 		Position:  vector.Vector{X: 100, Y: 600},
 		Velocity:  vector.Vector{X: 0, Y: 0},
 		Mass:      rigidbody.Infinite_mass,
-		IsMovable: true,
+		IsMovable: false,
 		Shape:     "Rectangle",
 		Width:     200,
 		Height:    50,
@@ -151,7 +122,7 @@ func main() {
 		Position:  vector.Vector{X: 400, Y: 450},
 		Velocity:  vector.Vector{X: 0, Y: 0},
 		Mass:      rigidbody.Infinite_mass,
-		IsMovable: true,
+		IsMovable: false,
 		Shape:     "Rectangle",
 		Width:     200,
 		Height:    50,
@@ -161,7 +132,7 @@ func main() {
 		Position:  vector.Vector{X: 700, Y: 300},
 		Velocity:  vector.Vector{X: 0, Y: 0},
 		Mass:      rigidbody.Infinite_mass,
-		IsMovable: true,
+		IsMovable: false,
 		Shape:     "Rectangle",
 		Width:     200,
 		Height:    50,
