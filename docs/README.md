@@ -179,3 +179,83 @@ Or access Velocity, Position and Mass of the Rigid Body like this:
 ball.Velocity // Get the velocity of the ball as a vector.Vector
 ball.Position.X += 5 // Increase the position of the ball in X direction by 5
 ```
+
+
+## Collision Detection
+Collision Detection is a process of detecting if two objects are colliding or not. It is used to check if two objects are colliding or not.
+
+For this there are 3 functions available in `github.com/rudransh61/Physix-go/dynamics/collision` ...
+
+### Circle-Circle Collision
+```go
+is_colliding := collision.CircleCollided(ball1, ball2) // true or false
+```
+### Circle-Rectangle Collision
+```go
+is_colliding := collision.CircleRectangleCollided(circle, rect) // true or false
+```
+make sure of order of variables in function (circle,rectangle)
+
+### Rectangle-Rectangle Collision
+```go
+is_colliding := collision.RectangleCollided(rect1, rect2) // true or false
+```
+
+### Collision Response
+Collision Response is a process of handling the collision between two objects. It is used to handle the collision between two objects.
+
+#### Circle-Circle Collision Response
+```go
+collision.PreventCircleOverlap(ball1, ball2)
+```
+
+#### Circle-Rectangle Collision Response
+```go
+collision.PreventCircleRectangleOverlap(circle, rect)
+```
+
+#### Rectangle-Rectangle Collision Response
+```go
+collision.PreventRectangleOverlap(rect1, rect2)
+```
+
+### Change Velocity after Collision
+```go
+collision.BounceOnCollision(ball1, ball2)
+```
+
+NOTE: `PreventCircleRectangleOverlap`,`PreventCircleOverlap`,`PreventRectangleOverlap` doesn't change the velocity after collision , So make sure to use `BounceOnCollision` after that...
+
+
+## Springs
+A Spring is a physical object that has a rest length and a spring constant. It has a position, velocity, and mass.
+It also has damping factor, which is used to reduce the velocity of the spring to 0 after a certain time.
+
+There are 2 bodies connected by a spring.
+`BallA`,`BallB` are the bodies connected by the spring.
+
+```go
+// Spring struct
+type Spring struct {
+	BallA, BallB *rigidbody.RigidBody
+	RestLength   float64
+	Stiffness    float64
+	Damping      float64
+}
+
+```
+
+### Create Spring
+```go
+spring := spring.NewSpring(ballA, ballB, stiffness, damping)
+```
+
+### Update Spring 
+```go
+spring.ApplyForce()
+```
+
+
+
+Now checkout `/exampes` folder for more examples , clone the repo and run the files.
+
