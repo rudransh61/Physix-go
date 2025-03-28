@@ -11,28 +11,23 @@
   
   <tr>
   <td></td>
-    <td><img src="/example_gifs/ex13.gif" width="200"><br><a href="examples/">Newton's Cradle</a></td>
+    <td><img src="/example_gifs/newton-cradle.gif" width="200"><br><a href="examples/newton_cradle.go">Newton's Cradle</a></td>
     
   </tr>
   <tr>
-    <td><img src="/example_gifs/ex12.gif" width="200"><br><a href="examples/">Double Pendulum</a></td>
-    <td><img src="/example_gifs/ex11.gif" width="200"><br><a href="examples/">Flappy Bird</a></td>
-    <td><img src="/example_gifs/ex10.gif" width="200"><br><a href="examples/">Platformer</a></td>
+    <td><img src="/example_gifs/double-pendulum.gif" width="200"><br><a href="examples/double_pendulum.go">Double Pendulum</a></td>
+    <td><img src="/example_gifs/flappybird.gif" width="200"><br><a href="examples/flappybird.go">Flappy Bird</a></td>
+    <td><img src="/example_gifs/platformer-game.gif" width="200"><br><a href="examples/platformer_game.go">Platformer</a></td>
   </tr>
   <tr>
-    <td><img src="/example_gifs/ex1.gif" width="200"><br><a href="examples/">RigidBody</a></td>
-    <td><img src="/example_gifs/ex2.gif" width="200"><br><a href="examples/">Soft Body</a></td>
-    <td><img src="/example_gifs/ex3.gif" width="200"><br><a href="examples/">Particle System</a></td>
+    <td><img src="/example_gifs/softbody.gif" width="200"><br><a href="examples/softbody.go">SoftBody</a></td>
+    <td><img src="/example_gifs/softbody2.gif" width="200"><br><a href="examples/softbody2.go">Soft Body 2</a></td>
+    <td><img src="/example_gifs/particle-system.gif" width="200"><br><a href="examples/particle_system.go">Particle System</a></td>
   </tr>
   <tr>
-    <td><img src="/example_gifs/ex5.gif" width="200"><br><a href="examples/">Bounce</a></td>
-    <td><img src="/example_gifs/ex4.gif" width="200"><br><a href="examples/">Particle System 2</a></td>
-    <td><img src="/example_gifs/ex6.gif" width="200"><br><a href="examples/">Collision</a></td>
-  </tr>
-  <tr>
-    <td><img src="/example_gifs/ex7.gif" width="200"><br><a href="examples/">Collision</a></td>
-    <td><img src="/example_gifs/ex9.gif" width="200"><br><a href="examples/">Projectile</a></td>
-    <td><img src="/example_gifs/ex8.gif" width="200"><br><a href="examples/">Circular Motion</a></td>
+    <td><img src="/example_gifs/bounce-ball.gif" width="200"><br><a href="examples/basic_bouncing.go">Bounce</a></td>
+    <td><img src="/example_gifs/box-collision.gif" width="200"><br><a href="examples/box_collision.go">Box Collision</a></td>
+    <td><img src="/example_gifs/oblique-collision.gif" width="200"><br><a href="examples/oblique_collision.go">Oblique Collision</a></td>
   </tr>
 </table>
 
