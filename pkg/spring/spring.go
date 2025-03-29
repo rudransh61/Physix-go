@@ -1,10 +1,10 @@
 package spring
+
 import (
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
 	// "math"
 )
-
 
 // Spring struct
 type Spring struct {
@@ -14,9 +14,15 @@ type Spring struct {
 	Damping      float64
 }
 
-// NewSpring creates a new spring connecting two balls
-func NewSpring(ballA, ballB *rigidbody.RigidBody, stiffness, damping float64) *Spring {
-	restLength := ballA.Position.Sub(ballB.Position).Magnitude()
+// NewSpring creates a new spring connecting two balls with an optional relaxed length.
+func NewSpring(ballA, ballB *rigidbody.RigidBody, stiffness, damping float64, relaxedLength ...float64) *Spring {
+	var restLength float64
+	if len(relaxedLength) > 0 {
+		restLength = relaxedLength[0] // Extract the first value from the slice
+	} else {
+		restLength = vector.Distance(ballA.Position, ballB.Position)
+	}
+
 	return &Spring{BallA: ballA, BallB: ballB, RestLength: restLength, Stiffness: stiffness, Damping: damping}
 }
 

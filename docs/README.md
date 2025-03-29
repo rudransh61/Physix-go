@@ -247,7 +247,7 @@ type Spring struct {
 
 ### Create Spring
 ```go
-spring := spring.NewSpring(ballA, ballB, stiffness, damping)
+spring := spring.NewSpring(ballA, ballB, stiffness, damping , rest_length) // Rest length is optional
 ```
 
 ### Update Spring 
