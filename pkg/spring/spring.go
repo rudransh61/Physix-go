@@ -28,7 +28,6 @@ func NewSpring(ballA, ballB *rigidbody.RigidBody, stiffness, damping float64, re
 
 // ApplyForce applies Hooke's Law
 func (s *Spring) ApplyForce() {
-	dt := 0.1
 	delta := s.BallB.Position.Sub(s.BallA.Position)
 	distance := delta.Magnitude()
 	direction := delta.Normalize()
@@ -43,10 +42,10 @@ func (s *Spring) ApplyForce() {
 	// Apply forces
 	if s.BallA.IsMovable && s.BallA.Mass != 0 {
 		acc := force.Add((dampingForce)).Scale(1 / s.BallA.Mass)
-		s.BallA.Velocity = s.BallA.Velocity.Add(acc.Scale(dt))
+		s.BallA.Velocity = s.BallA.Velocity.Add(acc)
 	}
 	if s.BallB.IsMovable && s.BallB.Mass != 0 {
 		acc := force.Add((dampingForce)).Scale(1 / s.BallB.Mass)
-		s.BallB.Velocity = s.BallB.Velocity.Sub(acc.Scale(dt))
+		s.BallB.Velocity = s.BallB.Velocity.Sub(acc)
 	}
 }
