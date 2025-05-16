@@ -1,8 +1,6 @@
 package spring
 
 import (
-	"fmt"
-
 	"github.com/rudransh61/Physix-go/pkg/rigidbody"
 	"github.com/rudransh61/Physix-go/pkg/vector"
 	// "math"
@@ -32,13 +30,11 @@ func NewSpring(ballA, ballB *rigidbody.RigidBody, stiffness, damping float64, re
 func (s *Spring) ApplyForce() {
 	dt := 0.1
 	delta := s.BallB.Position.Sub(s.BallA.Position)
-	fmt.Printf("delta:%v", delta)
 	distance := delta.Magnitude()
-	fmt.Printf("dist:%v", distance)
 	direction := delta.Normalize()
+
 	// Hooke's Law: F = -k(x - L)
 	force := direction.Scale(s.Stiffness).Scale(distance - s.RestLength)
-	fmt.Print(force)
 
 	// Damping force to stabilize oscillations
 	relativeVelocity := vector.ComponentAlong(s.BallB.Velocity.Sub(s.BallA.Velocity), delta)
