@@ -38,12 +38,12 @@ var (
 		IsMovable: false,
 	}
 
-	springSim = spring.NewSpring(mass, anchor, SpringStiffness, 0)
+	springSim = spring.NewSpring(mass, anchor, SpringStiffness, 0, SpringRestLength)
 )
 
 func update() error {
-	physix.ApplyForce(mass, vector.Vector{X: 0, Y: Gravity}, 0.1)
 	springSim.ApplyForce()
+	physix.ApplyForce(mass, vector.Vector{X: 0, Y: Gravity}, 0.1)
 	fmt.Printf("Mass Position: %v\n", mass.Position)
 	return nil
 }
