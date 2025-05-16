@@ -17,7 +17,7 @@ const (
 	BallRadius       = 20
 	Mass             = 10
 	SpringRestLength = 100
-	SpringStiffness  = 100
+	SpringStiffness  = 10
 )
 
 var (
