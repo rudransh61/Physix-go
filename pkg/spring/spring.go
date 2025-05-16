@@ -33,13 +33,19 @@ func (s *Spring) ApplyForce() {
 	direction := delta.Normalize()
 
 	// Hooke's Law: F = -k(x - L)
-	force := direction.Scale(s.Stiffness * (distance - s.RestLength))
+	force := direction.Scale(s.Stiffness).Scale(distance - s.RestLength)
 
 	// Damping force to stabilize oscillations
 	relativeVelocity := vector.ComponentAlong(s.BallB.Velocity.Sub(s.BallA.Velocity), delta)
 	dampingForce := relativeVelocity.Scale(s.Damping)
 
 	// Apply forces
-	s.BallA.Velocity = s.BallA.Velocity.Add(force.Add(dampingForce).Scale(1 / s.BallA.Mass))
-	s.BallB.Velocity = s.BallB.Velocity.Sub(force.Add(dampingForce).Scale(1 / s.BallB.Mass))
+	if s.BallA.IsMovable && s.BallA.Mass != 0 {
+		acc := force.Add((dampingForce)).Scale(1 / s.BallA.Mass)
+		s.BallA.Velocity = s.BallA.Velocity.Add(acc)
+	}
+	if s.BallB.IsMovable && s.BallB.Mass != 0 {
+		acc := force.Add((dampingForce)).Scale(1 / s.BallB.Mass)
+		s.BallB.Velocity = s.BallB.Velocity.Sub(acc)
+	}
 }
