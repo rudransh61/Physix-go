@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	balls      []*rigidbody.RigidBody
-	dt         = 0.1
-	redBallIdx = 0 // Index of the red ball
-	check      = 1
+	boxes     []*rigidbody.RigidBody
+	dt        = 0.1
+	redBoxIdx = 0 // Index of the red box
+	check     = 1
 )
 
 const (
@@ -27,22 +27,22 @@ const (
 )
 
 func update() error {
-	// Apply gravity and handle wall collisions for all balls
-	for _, ball := range balls {
+	// Apply gravity and handle wall collisions for all boxes
+	for _, box := range boxes {
 		gravity := vector.Vector{X: 0, Y: 0}
-		physix.ApplyForce(ball, gravity, dt)
-		physix.ApplyForce(ball, ball.Velocity.Scale(-2), dt)
-		checkWallCollision(ball)
+		physix.ApplyForce(box, gravity, dt)
+		physix.ApplyForce(box, box.Velocity.Scale(-2), dt)
+		checkWallCollision(box)
 	}
 
-	// Check for collisions between balls and resolve them
-	for i := 0; i < len(balls); i++ {
-		for j := i + 1; j < len(balls); j++ {
-			if collision.RectangleCollided(balls[i], balls[j]) {
-				collision.PreventRectangleOverlap(balls[i], balls[j])
-				collision.BounceOnCollision(balls[i], balls[j], 1.0)
+	// Check for collisions between boxes and resolve them
+	for i := 0; i < len(boxes); i++ {
+		for j := i + 1; j < len(boxes); j++ {
+			if collision.RectangleCollided(boxes[i], boxes[j]) {
+				collision.PreventRectangleOverlap(boxes[i], boxes[j])
+				collision.BounceOnCollision(boxes[i], boxes[j], 1.0)
 				if check < 2 {
-					collision.PreventRectangleOverlap(balls[i], balls[j])
+					collision.PreventRectangleOverlap(boxes[i], boxes[j])
 					check = 4
 				}
 			}
@@ -50,58 +50,57 @@ func update() error {
 	}
 	check = 4
 
-	// Move the red ball with arrow keys
-	redBall := balls[redBallIdx]
+	// Move the red box with WASD keys
+	redbox := boxes[redBoxIdx]
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		redBall.Velocity.X += 1
+		redbox.Velocity.X += 1
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		redBall.Velocity.X -= 1
+		redbox.Velocity.X -= 1
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		redBall.Velocity.Y -= 1
+		redbox.Velocity.Y -= 1
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		redBall.Velocity.Y += 1
+		redbox.Velocity.Y += 1
 	}
 
 	return nil
 }
 
-func checkWallCollision(ball *rigidbody.RigidBody) {
+func checkWallCollision(box *rigidbody.RigidBody) {
 	// Bounce off the walls
-	// Bounce off the walls
-	if ball.Position.X < 100 || ball.Position.X > 600 {
-		// ball.Velocity.X = -1*math.Abs(ball.Velocity.X)
-		if ball.Position.X < 100 {
-			ball.Velocity.X = math.Abs(ball.Velocity.X)
+	if box.Position.X < 100 || box.Position.X > 600 {
+		// box.Velocity.X = -1*math.Abs(box.Velocity.X)
+		if box.Position.X < 100 {
+			box.Velocity.X = math.Abs(box.Velocity.X)
 		}
-		if ball.Position.X > 600 {
-			ball.Velocity.X = -1 * math.Abs(ball.Velocity.X)
+		if box.Position.X > 600 {
+			box.Velocity.X = -1 * math.Abs(box.Velocity.X)
 		}
 	}
-	if ball.Position.Y < 100 || ball.Position.Y > 600 {
-		// ball.Velocity.Y = -1*math.Abs(ball.Velocity.X)
-		if ball.Position.Y < 100 {
-			ball.Velocity.Y = math.Abs(ball.Velocity.Y)
+	if box.Position.Y < 100 || box.Position.Y > 600 {
+		// box.Velocity.Y = -1*math.Abs(box.Velocity.X)
+		if box.Position.Y < 100 {
+			box.Velocity.Y = math.Abs(box.Velocity.Y)
 		}
-		if ball.Position.Y > 600 {
-			ball.Velocity.Y = -1 * math.Abs(ball.Velocity.Y)
+		if box.Position.Y > 600 {
+			box.Velocity.Y = -1 * math.Abs(box.Velocity.Y)
 		}
 	}
 }
 
 func draw(screen *ebiten.Image) {
-	for i, ball := range balls {
+	for i, box := range boxes {
 		// Determine color
 		var c color.RGBA
-		if i == redBallIdx {
+		if i == redBoxIdx {
 			c = color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff} // Red color
 		} else {
 			c = color.RGBA{R: 0, G: 0xff, B: 0, A: 0xff} // Green color
 		}
-		// Draw the ball
-		ebitenutil.DrawRect(screen, ball.Position.X, ball.Position.Y, ball.Width, ball.Height, c)
+		// Draw the box
+		ebitenutil.DrawRect(screen, box.Position.X, box.Position.Y, box.Width, box.Height, c)
 	}
 
 	// Draw boundaries
@@ -114,11 +113,11 @@ func draw(screen *ebiten.Image) {
 func main() {
 	// Set up the window
 	ebiten.SetWindowSize(800, 800)
-	ebiten.SetWindowTitle("Bouncing Balls")
+	ebiten.SetWindowTitle("Bouncing boxes")
 
-	// Initialize rigid bodies (balls)
-	n := 5 // Number of balls
-	initializeBalls(n)
+	// Initialize rigid bodies (boxes)
+	n := 5 // Number of boxes
+	initializeboxes(n)
 
 	// Run the game loop
 	if err := ebiten.RunGame(&Game{}); err != nil {
@@ -126,11 +125,11 @@ func main() {
 	}
 }
 
-// initializeBalls initializes n balls with common properties
-func initializeBalls(n int) {
-	balls = make([]*rigidbody.RigidBody, n)
+// initializeboxes initializes n boxes with common properties
+func initializeboxes(n int) {
+	boxes = make([]*rigidbody.RigidBody, n)
 	for i := 0; i < n; i++ {
-		balls[i] = &rigidbody.RigidBody{
+		boxes[i] = &rigidbody.RigidBody{
 			Position:  vector.Vector{X: float64(rand.Intn(200) + 200), Y: float64(rand.Intn(200) + 200)},
 			Velocity:  vector.Vector{X: 0, Y: 0},
 			Mass:      Mass,
